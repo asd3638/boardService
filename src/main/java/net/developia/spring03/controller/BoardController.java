@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,6 +24,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,6 +53,7 @@ public class BoardController {
 		log.info("total: " + total);
 
 		model.addAttribute("pageMaker", new PageDTO(cri, total));
+
 	}
 
 	@PostMapping("/register")
@@ -72,16 +78,111 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 
-	@GetMapping({ "/get", "/modify" })
-	public void get(@RequestParam("bno") Long bno, @ModelAttribute("cri") Criteria cri, Model model) {
+	@GetMapping("/get")
+	public String get(@RequestParam("bno") Long bno, @ModelAttribute("cri") Criteria cri, HttpServletRequest request, HttpServletResponse response, Model model) {
 
 		log.info("/get or modify");
-		model.addAttribute("board", service.get(bno));
+		log.info(LocalDate.now());
+		System.out.println("=====================");
+		System.out.println(LocalDate.now());
+
+		Cookie[] cookies = request.getCookies();
+		Cookie viewCookie = null;
+
+		if (cookies != null && cookies.length > 0)
+		{
+			for (int i = 0; i < cookies.length; i++)
+			{
+				// Cookie의 name이 cookie + reviewNo와 일치하는 쿠키를 viewCookie에 넣어줌
+				if (cookies[i].getName().equals("cookie"+bno))
+				{
+					System.out.println("처음 쿠키가 생성한 뒤 들어옴.");
+					viewCookie = cookies[i];
+				}
+			}
+		}
+		if (viewCookie == null) {
+			System.out.println("cookie 없음");
+
+			// 쿠키 생성(이름, 값)
+			Cookie newCookie = new Cookie("cookie"+bno, "|" + bno + "|");
+
+			// 쿠키 추가
+			response.addCookie(newCookie);
+
+			// 쿠키를 추가 시키고 조회수 증가시킴
+			service.updateReadCount(bno);
+		}
+		// viewCookie가 null이 아닐경우 쿠키가 있으므로 조회수 증가 로직을 처리하지 않음.
+		else {
+			System.out.println("cookie 있음");
+			// 쿠키 값 받아옴.
+			String value = viewCookie.getValue();
+			System.out.println("cookie 값 : " + value);
+
+		}
+
+		BoardDTO boardDTO = service.get(bno);
+		model.addAttribute("board", boardDTO);
+
+		return "board/get";
 	}
+
+	@GetMapping("/modify")
+	public void getModify(@RequestParam("bno") Long bno, @ModelAttribute("cri") Criteria cri, Model model) {
+
+		log.info("/get or modify");
+		log.info(LocalDate.now());
+		System.out.println("=====================");
+		System.out.println(LocalDate.now());
+
+//		Cookie[] cookies = request.getCookies();
+//		Cookie viewCookie = null;
+//
+//		if (cookies != null && cookies.length > 0)
+//		{
+//			for (int i = 0; i < cookies.length; i++)
+//			{
+//				// Cookie의 name이 cookie + reviewNo와 일치하는 쿠키를 viewCookie에 넣어줌
+//				if (cookies[i].getName().equals("cookie"+bno))
+//				{
+//					System.out.println("처음 쿠키가 생성한 뒤 들어옴.");
+//					viewCookie = cookies[i];
+//				}
+//			}
+//		}
+//		if (viewCookie == null) {
+//			System.out.println("cookie 없음");
+//
+//			// 쿠키 생성(이름, 값)
+//			Cookie newCookie = new Cookie("cookie"+bno, "|" + bno + "|");
+//
+//			// 쿠키 추가
+//			response.addCookie(newCookie);
+//
+//			// 쿠키를 추가 시키고 조회수 증가시킴
+//			service.updateReadCount(bno);
+//		}
+//		// viewCookie가 null이 아닐경우 쿠키가 있으므로 조회수 증가 로직을 처리하지 않음.
+//		else {
+//			System.out.println("cookie 있음");
+//			// 쿠키 값 받아옴.
+//			String value = viewCookie.getValue();
+//			System.out.println("cookie 값 : " + value);
+//
+//		}
+
+		BoardDTO boardDTO = service.get(bno);
+		model.addAttribute("board", boardDTO);
+	}
+
+
 
 	@PostMapping("/modify")
 	public String modify(BoardDTO board, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
 		log.info("modify:" + board);
+		log.info(LocalDate.now());
+		board.setUpdateDate(java.sql.Date.valueOf(LocalDate.now()));
 
 		if (service.modify(board)) {
 			rttr.addFlashAttribute("result", "success");
@@ -100,13 +201,7 @@ public class BoardController {
 
 		log.info("remove..." + bno);
 
-		List<BoardAttachDTO> attachList = service.getAttachList(bno);
-
 		if (service.remove(bno)) {
-
-			// delete Attach Files
-			deleteFiles(attachList);
-
 			rttr.addFlashAttribute("result", "success");
 		}
 		return "redirect:/board/list" + cri.getListLink();

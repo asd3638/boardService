@@ -22,4 +22,6 @@ public interface BoardMapper {
     int update(BoardDTO board);
 
     int getTotalCount(Criteria cri);
+
+    void updateReadCount(Long bno);
 }

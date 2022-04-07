@@ -27,4 +27,6 @@ public interface BoardService {
 
 	public void removeAttach(Long bno);
 
+	void updateReadCount(Long bno);
+
 }

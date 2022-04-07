@@ -23,9 +23,6 @@
             <div class="panel-body">
 
                 <form role="form" action="/board/modify" method="post">
-
-                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-
                     <input type='hidden' name='pageNum' value='<c:out value="${cri.pageNum }"/>'>
                     <input type='hidden' name='amount' value='<c:out value="${cri.amount }"/>'>
                     <input type='hidden' name='type' value='<c:out value="${cri.type }"/>'>
@@ -57,20 +54,24 @@
                     </div>
 
                     <div class="form-group">
-                        <label>RegDate</label>
+                        <label>ReadCount</label>
+                        <input class="form-control" name='readCount'
+                               value='<c:out value="${board.readCount}"/>' readonly="readonly">
+                    </div>
+
+                    <div class="form-group">
+                        <label>regDate</label>
                         <input class="form-control" name='regDate'
-                               value='<fmt:formatDate pattern = "yyyy/MM/dd" value = "${board.regdate}" />'
+                               value='<fmt:formatDate pattern = "yyyy/MM/dd" value = "${board.regDate}" />'
                                readonly="readonly">
                     </div>
 
                     <div class="form-group">
                         <label>Update Date</label>
                         <input class="form-control" name='updateDate'
-                               value='<fmt:formatDate pattern = "yyyy/MM/dd" value = "${board.updateDate}" />'
+                               value='<fmt:formatDate pattern = "yyyy/MM/dd" value="${board.updateDate}" />'
                                readonly="readonly">
                     </div>
-                    <!--   <button type="submit" data-oper='modify' class="btn btn-default">Modify</button>
-                      <button type="submit" data-oper='remove' class="btn btn-danger">Remove</button> -->
 
                     <button type="submit" data-oper='modify' class="btn btn-default">Modify</button>
                     <button type="submit" data-oper='remove' class="btn btn-danger">Remove</button>

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.Cookie;
 import java.util.List;
 
 @Log4j
@@ -31,15 +32,15 @@ public class BoardServiceImpl implements BoardService {
 
 		mapper.insertSelectKey(board);
 
-		if (board.getAttachList() == null || board.getAttachList().size() <= 0) {
-			return;
-		}
-
-		board.getAttachList().forEach(attach -> {
-
-			attach.setBno(board.getBno());
-			attachMapper.insert(attach);
-		});
+//		if (board.getAttachList() == null || board.getAttachList().size() <= 0) {
+//			return;
+//		}
+//
+//		board.getAttachList().forEach(attach -> {
+//
+//			attach.setBno(board.getBno());
+//			attachMapper.insert(attach);
+//		});
 	}
 
 	@Override
@@ -57,37 +58,12 @@ public class BoardServiceImpl implements BoardService {
 
 		log.info("modify......" + board);
 
-		attachMapper.deleteAll(board.getBno());
+//		attachMapper.deleteAll(board.getBno());
 
 		boolean modifyResult = mapper.update(board) == 1;
 
-		if (modifyResult && board.getAttachList().size() > 0) {
-
-			board.getAttachList().forEach(attach -> {
-
-				attach.setBno(board.getBno());
-				attachMapper.insert(attach);
-			});
-		}
-
 		return modifyResult;
 	}
-
-	// @Override
-	// public boolean modify(BoardDTO board) {
-	//
-	// log.info("modify......" + board);
-	//
-	// return mapper.update(board) == 1;
-	// }
-
-	// @Override
-	// public boolean remove(Long bno) {
-	//
-	// log.info("remove...." + bno);
-	//
-	// return mapper.delete(bno) == 1;
-	// }
 
 	@Transactional
 	@Override
@@ -137,5 +113,13 @@ public class BoardServiceImpl implements BoardService {
 		log.info("remove all attach files");
 
 		attachMapper.deleteAll(bno);
+	}
+
+	@Override
+	public void updateReadCount(Long bno) {
+
+		log.info("plus readcount");
+
+		mapper.updateReadCount(bno);
 	}
 }

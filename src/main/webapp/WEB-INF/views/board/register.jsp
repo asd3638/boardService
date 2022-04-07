@@ -61,7 +61,7 @@
             <!-- /.panel-heading -->
             <div class="panel-body">
 
-                <form role="form" action="/board/register" method="post" enctype="multipart/form-data">
+                <form role="form" action="/board/register" method="post">
 
                     <div class="form-group">
                         <label>Title</label> <input class="form-control" name='title'>
@@ -116,37 +116,25 @@
 </div>
 <!-- /.row -->
 <script>
-    function onchangeTest() {
-        console.log("checnge")
-    }
-
 $(document).ready(function (e) {
         let formObj = $("form[role='form']");
-
         $("button[type='submit']").on("click", function (e) {
-
             e.preventDefault();
-
             console.log("submit clicked");
-
             let str = "";
-
             $(".uploadResult ul li").each(function (i, obj) {
-
                 let jobj = $(obj);
-
                 console.dir(jobj);
                 console.log("-------------------------");
                 console.log(jobj.data("filename"));
-
-
                 str += "<input type='hidden' name='attachList[" + i + "].fileName' value='" + jobj.data("filename") + "'>";
                 str += "<input type='hidden' name='attachList[" + i + "].uuid' value='" + jobj.data("uuid") + "'>";
                 str += "<input type='hidden' name='attachList[" + i + "].uploadPath' value='" + jobj.data("path") + "'>";
                 str += "<input type='hidden' name='attachList[" + i + "].fileType' value='" + jobj.data("type") + "'>";
-
             });
-            formObj.append(str).submit();
+            console.log(formObj);
+            formObj.submit();
+            //formObj.append(str).submit();
         });
 
         let regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");

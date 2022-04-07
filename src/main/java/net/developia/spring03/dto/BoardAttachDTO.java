@@ -8,7 +8,7 @@ public class BoardAttachDTO {
   private String uuid;
   private String uploadPath;
   private String fileName;
-  private String fileType;
+  private boolean fileType;
   
   private Long bno;
   

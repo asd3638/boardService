@@ -29,7 +29,7 @@ public class BoardAttachMapperTest {
         boardAttachDTO.setFileName("filename");
         boardAttachDTO.setUuid("uuid");
         boardAttachDTO.setUploadPath("uploadpath");
-        boardAttachDTO.setFileType("filetype");
+
         boardAttachDTO.setBno(Long.valueOf(13));
         boardAttachMapper.insert(boardAttachDTO);
     }

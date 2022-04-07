@@ -1,6 +1,5 @@
 package net.developia.spring03.dto;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -12,9 +11,9 @@ public class BoardDTO {
 	private String title;
 	private String content;
 	private String writer;
-	private Date regdate;
+	private Date regDate;
 	private Date updateDate;
-
+	private int readCount;
 	private int replyCnt;
 
 	private List<BoardAttachDTO> attachList;
