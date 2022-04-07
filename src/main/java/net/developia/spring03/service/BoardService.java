@@ -2,22 +2,29 @@ package net.developia.spring03.service;
 
 import java.util.List;
 
+import net.developia.spring03.dto.BoardAttachDTO;
 import net.developia.spring03.dto.BoardDTO;
+import net.developia.spring03.dto.Criteria;
 
 public interface BoardService {
 
-	void insertBoard(BoardDTO boardDTO) throws Exception;
+	public void register(BoardDTO board);
 
-	List<BoardDTO> getBoardList() throws Exception;
+	public BoardDTO get(Long bno);
 
-	BoardDTO getDetail(long no) throws Exception;
+	public boolean modify(BoardDTO board);
 
-	void deleteBoard(BoardDTO boardDTO) throws Exception;
+	public boolean remove(Long bno);
 
-	void updateBoard(BoardDTO boardDTO) throws Exception;
+	// public List<BoardDTO> getList();
 
-	List<BoardDTO> getBoardListPage(long pg) throws Exception;
+	public List<BoardDTO> getList(Criteria cri);
 
-	long getBoardCount() throws Exception;
+	//추가
+	public int getTotal(Criteria cri);
+
+	public List<BoardAttachDTO> getAttachList(Long bno);
+
+	public void removeAttach(Long bno);
 
 }
