@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.developia.spring03.mapper.BoardMapper">
+<!--	<insert id="insertBoard" parameterType="BoardDTO">-->
+<!--	INSERT INTO board(no, title, name, password, content)-->
+<!--	VALUES(board_no_seq.nextval, #{title}, #{name}, #{password}, #{content})-->
+<!--	</insert>-->
+	
+	<select id="getBoardList" resultType="net.developia.spring03.dto.BoardDTO">
+	SELECT
+	    NO,
+	    title,
+	    NAME,
+	    regdate,
+	    readcount
+	FROM
+	    board
+	ORDER BY NO DESC
+	</select>
+	
+<!--	<select id="getBoardListPage" parameterType="long" resultType="BoardDTO">-->
+<!--	SELECT B.*-->
+<!--	FROM (SELECT  rownum AS rnum, A.*-->
+<!--	      FROM	(SELECT no, title, name, regdate, readcount-->
+<!--		         FROM   board-->
+<!--	             ORDER  BY no DESC) A) B-->
+<!--	WHERE rnum BETWEEN #{startNum} AND #{endNum}-->
+<!--	</select>-->
+	
+<!--	<select id="getDetail" parameterType="long" resultType="BoardDTO">-->
+<!--	SELECT-->
+<!--	    NO,-->
+<!--	    title,-->
+<!--	    NAME,-->
+<!--	    CONTENT,-->
+<!--	    regdate,-->
+<!--	    readcount-->
+<!--	FROM-->
+<!--	    board-->
+<!--	WHERE-->
+<!--		no = #{no}-->
+<!--	</select>-->
+	
+<!--	<update id="updateReadcount" parameterType="long">-->
+<!--	UPDATE board SET readcount=readcount+1 WHERE no=#{no}-->
+<!--	</update>-->
+	
+<!--	<delete id="deleteBoard" parameterType="BoardDTO">-->
+<!--	DELETE board-->
+<!--	WHERE  no=#{no} AND password=#{password}-->
+<!--	</delete>-->
+	
+<!--	<update id="updateBoard" parameterType="BoardDTO">-->
+<!--	UPDATE board SET-->
+<!--	       title=#{title},-->
+<!--	       name =#{name},-->
+<!--	       content=#{content}-->
+<!--	WHERE  no=#{no} AND password=#{password}-->
+<!--	</update>-->
+	
+<!--	<select id="getBoardCount" resultType="long">-->
+<!--	SELECT count(*) as cnt -->
+<!--	FROM   board-->
+<!--	</select>-->
+</mapper>

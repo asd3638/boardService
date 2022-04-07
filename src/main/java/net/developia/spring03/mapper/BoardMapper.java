@@ -6,7 +6,6 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 public interface BoardMapper {
-
-    @Select("select * from board")
-    public List<BoardDTO> getList();
+    //@Select("select * from board")
+    List<BoardDTO> getBoardList();
 }
