@@ -66,21 +66,72 @@
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
-            <div class = "row">
-            	<div class="col-lg-12">
-            		<div class="panel panel-default">
-            			<div class="panel-heading">
-            				Files
-            			</div>
-            			<div class="panel-body">
-            				<div class="uploadResult">
-            					<ul>
-            					</ul>
-            				</div>
-            			</div>
-            		</div>
-            	</div>
+            <%--댓글--%>
+            <div class='row'>
+
+                <div class="col-lg-12">
+
+                    <!-- /.panel -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-comments fa-fw"></i> Reply
+                            <button id='addReplyBtn' class='btn btn-primary btn-xs pull-right'>New Reply</button>
+                        </div>
+
+
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+
+                            <ul class="chat">
+
+                            </ul>
+                            <!-- ./ end ul -->
+                        </div>
+                        <!-- /.panel .chat-panel -->
+
+                        <div class="panel-footer"></div>
+
+
+                    </div>
+                </div>
+                <!-- ./ end row -->
             </div>
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+                 aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"
+                                    aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel">REPLY MODAL</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label>Reply</label>
+                                <input class="form-control" name='reply' value='New Reply!!!!'>
+                            </div>
+                            <div class="form-group">
+                                <label>Replyer</label>
+                                <input class="form-control" name='replyer' value='replyer'>
+                            </div>
+                            <div class="form-group">
+                                <label>Reply Date</label>
+                                <input class="form-control" name='replyDate' value='2018-01-01 13:13'>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button id='modalModBtn' type="button" class="btn btn-warning">Modify</button>
+                            <button id='modalRemoveBtn' type="button" class="btn btn-danger">Remove</button>
+                            <button id='modalRegisterBtn' type="button" class="btn btn-primary">Register</button>
+                            <button id='modalCloseBtn' type="button" class="btn btn-default">Close</button>
+                        </div>          </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
             <script>
             	var actionForm = $("#actionForm");
             
@@ -95,44 +146,419 @@
             		actionForm.attr("action", "/board/modify");
        				actionForm.submit();
             	});
-            	
-            	$(document).ready(function() {
-            		(function(){
-            			var bno = '<c:out value="${board.bno}"/>';
-            			$.getJSON("/board/getAttachList", {bno: bno}, function(arr){
-            		        
-            			       console.log(arr);
-            			       
-            			       var str = "";
-            			       
-            			       $(arr).each(function(i, attach){
-            			       
-            			         //image type
-            			         if(attach.fileType){
-            			           var fileCallPath =  encodeURIComponent( attach.uploadPath+ "/s_"+attach.uuid +"_"+attach.fileName);
-            			           
-            			           str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.fileType+"' ><div>";
-            			           str += "<img src='/display?fileName="+fileCallPath+"'>";
-            			           str += "</div>";
-            			           str +"</li>";
-            			         }else{
-            			             
-            			           str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.fileType+"' ><div>";
-            			           str += "<span> "+ attach.fileName+"</span><br/>";
-            			           str += "<img src='/resources/img/attach.png'></a>";
-            			           str += "</div>";
-            			           str +"</li>";
-            			         }
-            			       });
-            			       
-            			       $(".uploadResult ul").html(str);
-            			       
-            			       
-            			     });
-            		})();
-            	});
+
+                $(document).ready(function () {
+                    console.log("ready")
+                    var bnoValue = '<c:out value="${board.bno}"/>';
+                    var replyUL = $(".chat");
+
+                    showList(1);
+
+                    function showList(page){
+
+                        console.log("show list " + page);
+
+                        replyService.getList({bno:bnoValue,page: page|| 1 }, function(replyCnt, list) {
+
+                            console.log("replyCnt: "+ replyCnt );
+                            console.log("list: " + list);
+                            console.log(list);
+
+                            if(page == -1){
+                                pageNum = Math.ceil(replyCnt/10.0);
+                                showList(pageNum);
+                                return;
+                            }
+
+                            var str="";
+
+                            if(list == null || list.length == 0){
+                                return;
+                            }
+
+                            for (var i = 0, len = list.length || 0; i < len; i++) {
+                                str +="<li class='left clearfix' data-rno='"+list[i].rno+"'>";
+                                str +="  <div><div class='header'><strong class='primary-font'>["
+                                    +list[i].rno+"] "+list[i].replyer+"</strong>";
+                                str +="    <small class='pull-right text-muted'>"
+                                    +replyService.displayTime(list[i].replyDate)+"</small></div>";
+                                str +="    <p>"+list[i].reply+"</p></div></li>";
+                            }
+
+                            replyUL.html(str);
+
+                            showReplyPage(replyCnt);
+
+
+                        });//end function
+
+                    }//end showList
+
+                    var pageNum = 1;
+                    var replyPageFooter = $(".panel-footer");
+
+                    function showReplyPage(replyCnt){
+
+                        var endNum = Math.ceil(pageNum / 10.0) * 10;
+                        var startNum = endNum - 9;
+
+                        var prev = startNum != 1;
+                        var next = false;
+
+                        if(endNum * 10 >= replyCnt){
+                            endNum = Math.ceil(replyCnt/10.0);
+                        }
+
+                        if(endNum * 10 < replyCnt){
+                            next = true;
+                        }
+
+                        var str = "<ul class='pagination pull-right'>";
+
+                        if(prev){
+                            str+= "<li class='page-item'><a class='page-link' href='"+(startNum -1)+"'>Previous</a></li>";
+                        }
+
+                        for(var i = startNum ; i <= endNum; i++){
+
+                            var active = pageNum == i? "active":"";
+
+                            str+= "<li class='page-item "+active+" '><a class='page-link' href='"+i+"'>"+i+"</a></li>";
+                        }
+
+                        if(next){
+                            str+= "<li class='page-item'><a class='page-link' href='"+(endNum + 1)+"'>Next</a></li>";
+                        }
+
+                        str += "</ul></div>";
+
+                        console.log(str);
+
+                        replyPageFooter.html(str);
+                    }
+
+                    replyPageFooter.on("click","li a", function(e){
+                        e.preventDefault();
+                        console.log("page click");
+
+                        var targetPageNum = $(this).attr("href");
+
+                        console.log("targetPageNum: " + targetPageNum);
+
+                        pageNum = targetPageNum;
+
+                        showList(pageNum);
+                    });
+                    var modal = $(".modal");
+                    var modalInputReply = modal.find("input[name='reply']");
+                    var modalInputReplyer = modal.find("input[name='replyer']");
+                    var modalInputReplyDate = modal.find("input[name='replyDate']");
+
+                    var modalModBtn = $("#modalModBtn");
+                    var modalRemoveBtn = $("#modalRemoveBtn");
+                    var modalRegisterBtn = $("#modalRegisterBtn");
+
+                    $("#modalCloseBtn").on("click", function(e){
+
+                        modal.modal('hide');
+                    });
+
+                    $("#addReplyBtn").click(function(e){
+                        e.preventDefault();
+                        console.log("hi");
+                        modal.find("input").val("");
+                        modalInputReplyDate.closest("div").hide();
+                        modal.find("button[id !='modalCloseBtn']").hide();
+
+                        modalRegisterBtn.show();
+
+                        $(".modal").modal("show");
+
+                    });
+
+
+                    modalRegisterBtn.on("click",function(e){
+                        console.log("hi");
+                        var reply = {
+                            reply: modalInputReply.val(),
+                            replyer:modalInputReplyer.val(),
+                            bno:bnoValue
+                        };
+                        replyService.add(reply, function(result){
+
+                            alert(result);
+
+                            modal.find("input").val("");
+                            modal.modal("hide");
+
+                            //showList(1);
+                            showList(-1);
+
+                        });
+
+                    });
+
+
+                    //댓글 조회 클릭 이벤트 처리
+                    $(".chat").on("click", "li", function(e){
+
+                        var rno = $(this).data("rno");
+
+                        replyService.get(rno, function(reply){
+
+                            modalInputReply.val(reply.reply);
+                            modalInputReplyer.val(reply.replyer);
+                            modalInputReplyDate.val(replyService.displayTime( reply.replyDate))
+                                .attr("readonly","readonly");
+                            modal.data("rno", reply.rno);
+
+                            modal.find("button[id !='modalCloseBtn']").hide();
+                            modalModBtn.show();
+                            modalRemoveBtn.show();
+
+                            $(".modal").modal("show");
+
+                        });
+                    });
+
+
+                    /*     modalModBtn.on("click", function(e){
+
+                          var reply = {rno:modal.data("rno"), reply: modalInputReply.val()};
+
+                          replyService.update(reply, function(result){
+
+                            alert(result);
+                            modal.modal("hide");
+                            showList(1);
+
+                          });
+
+                        });
+
+                        modalRemoveBtn.on("click", function (e){
+
+                            var rno = modal.data("rno");
+
+                            replyService.remove(rno, function(result){
+
+                                alert(result);
+                                modal.modal("hide");
+                                showList(1);
+
+                            });
+
+                          }); */
+
+                    modalModBtn.on("click", function(e){
+
+                        var reply = {rno:modal.data("rno"), reply: modalInputReply.val()};
+
+                        replyService.update(reply, function(result){
+
+                            alert(result);
+                            modal.modal("hide");
+                            showList(pageNum);
+
+                        });
+
+                    });
+
+
+                    modalRemoveBtn.on("click", function (e){
+
+                        var rno = modal.data("rno");
+
+                        replyService.remove(rno, function(result){
+
+                            alert(result);
+                            modal.modal("hide");
+                            showList(pageNum);
+
+                        });
+
+                    });
+
+
+                });
             </script>
-       
-            
-            
-            <%@include file = "../includes/footer.jsp" %>
+            <script type="text/javascript">
+                $(document).ready(function() {
+
+                    var operForm = $("#operForm");
+
+                    $("button[data-oper='modify']").on("click", function(e){
+
+                        operForm.attr("action","/board/modify").submit();
+
+                    });
+
+
+                    $("button[data-oper='list']").on("click", function(e){
+
+                        operForm.find("#bno").remove();
+                        operForm.attr("action","/board/list")
+                        operForm.submit();
+
+                    });
+                });
+            </script>
+<script>
+    console.log("Reply Module........");
+
+    var replyService = (function() {
+
+        function add(reply, callback, error) {
+            console.log("add reply...............");
+
+            $.ajax({
+                type : 'post',
+                url : '/replies/new',
+                data : JSON.stringify(reply),
+                contentType : "application/json; charset=utf-8",
+                success : function(result, status, xhr) {
+                    if (callback) {
+                        callback(result);
+                    }
+                },
+                error : function(xhr, status, er) {
+                    if (error) {
+                        error(er);
+                    }
+                }
+            })
+        }
+
+//	function getList(param, callback, error) {
+//
+//		var bno = param.bno;
+//		var page = param.page || 1;
+//
+//		$.getJSON("/replies/pages/" + bno + "/" + page + ".json",
+//				function(data) {
+//					if (callback) {
+//						callback(data);
+//					}
+//				}).fail(function(xhr, status, err) {
+//			if (error) {
+//				error();
+//			}
+//		});
+//	}
+
+
+
+        function getList(param, callback, error) {
+
+            var bno = param.bno;
+            var page = param.page || 1;
+
+            $.getJSON("/replies/pages/" + bno + "/" + page + ".json",
+                function(data) {
+
+                    if (callback) {
+                        //callback(data); // 댓글 목록만 가져오는 경우
+                        callback(data.replyCnt, data.list); //댓글 숫자와 목록을 가져오는 경우
+                    }
+                }).fail(function(xhr, status, err) {
+                if (error) {
+                    error();
+                }
+            });
+        }
+
+
+        function remove(rno, callback, error) {
+            $.ajax({
+                type : 'delete',
+                url : '/replies/' + rno,
+                success : function(deleteResult, status, xhr) {
+                    if (callback) {
+                        callback(deleteResult);
+                    }
+                },
+                error : function(xhr, status, er) {
+                    if (error) {
+                        error(er);
+                    }
+                }
+            });
+        }
+
+        function update(reply, callback, error) {
+
+            console.log("RNO: " + reply.rno);
+
+            $.ajax({
+                type : 'put',
+                url : '/replies/' + reply.rno,
+                data : JSON.stringify(reply),
+                contentType : "application/json; charset=utf-8",
+                success : function(result, status, xhr) {
+                    if (callback) {
+                        callback(result);
+                    }
+                },
+                error : function(xhr, status, er) {
+                    if (error) {
+                        error(er);
+                    }
+                }
+            });
+        }
+
+        function get(rno, callback, error) {
+
+            $.get("/replies/" + rno + ".json", function(result) {
+
+                if (callback) {
+                    callback(result);
+                }
+
+            }).fail(function(xhr, status, err) {
+                if (error) {
+                    error();
+                }
+            });
+        }
+
+        function displayTime(timeValue) {
+
+            var today = new Date();
+
+            var gap = today.getTime() - timeValue;
+
+            var dateObj = new Date(timeValue);
+            var str = "";
+
+            if (gap < (1000 * 60 * 60 * 24)) {
+
+                var hh = dateObj.getHours();
+                var mi = dateObj.getMinutes();
+                var ss = dateObj.getSeconds();
+
+                return [ (hh > 9 ? '' : '0') + hh, ':', (mi > 9 ? '' : '0') + mi,
+                    ':', (ss > 9 ? '' : '0') + ss ].join('');
+
+            } else {
+                var yy = dateObj.getFullYear();
+                var mm = dateObj.getMonth() + 1; // getMonth() is zero-based
+                var dd = dateObj.getDate();
+
+                return [ yy, '/', (mm > 9 ? '' : '0') + mm, '/',
+                    (dd > 9 ? '' : '0') + dd ].join('');
+            }
+        }
+        ;
+
+        return {
+            add : add,
+            get : get,
+            getList : getList,
+            remove : remove,
+            update : update,
+            displayTime : displayTime
+        };
+
+    })();
+</script>

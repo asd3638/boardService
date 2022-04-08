@@ -136,42 +136,6 @@ public class BoardController {
 		System.out.println("=====================");
 		System.out.println(LocalDate.now());
 
-//		Cookie[] cookies = request.getCookies();
-//		Cookie viewCookie = null;
-//
-//		if (cookies != null && cookies.length > 0)
-//		{
-//			for (int i = 0; i < cookies.length; i++)
-//			{
-//				// Cookie의 name이 cookie + reviewNo와 일치하는 쿠키를 viewCookie에 넣어줌
-//				if (cookies[i].getName().equals("cookie"+bno))
-//				{
-//					System.out.println("처음 쿠키가 생성한 뒤 들어옴.");
-//					viewCookie = cookies[i];
-//				}
-//			}
-//		}
-//		if (viewCookie == null) {
-//			System.out.println("cookie 없음");
-//
-//			// 쿠키 생성(이름, 값)
-//			Cookie newCookie = new Cookie("cookie"+bno, "|" + bno + "|");
-//
-//			// 쿠키 추가
-//			response.addCookie(newCookie);
-//
-//			// 쿠키를 추가 시키고 조회수 증가시킴
-//			service.updateReadCount(bno);
-//		}
-//		// viewCookie가 null이 아닐경우 쿠키가 있으므로 조회수 증가 로직을 처리하지 않음.
-//		else {
-//			System.out.println("cookie 있음");
-//			// 쿠키 값 받아옴.
-//			String value = viewCookie.getValue();
-//			System.out.println("cookie 값 : " + value);
-//
-//		}
-
 		BoardDTO boardDTO = service.get(bno);
 		model.addAttribute("board", boardDTO);
 	}
@@ -218,13 +182,13 @@ public class BoardController {
 
 		attachList.forEach(attach -> {
 			try {
-				Path file  = Paths.get("C:\\upload\\"+attach.getUploadPath()+"\\" + attach.getUuid()+"_"+ attach.getFileName());
+				Path file  = Paths.get("/Users/mac/"+attach.getUploadPath()+"/" + attach.getUuid()+"_"+ attach.getFileName());
 
 				Files.deleteIfExists(file);
 
 				if(Files.probeContentType(file).startsWith("image")) {
 
-					Path thumbNail = Paths.get("C:\\upload\\"+attach.getUploadPath()+"\\s_" + attach.getUuid()+"_"+ attach.getFileName());
+					Path thumbNail = Paths.get("/Users/mac/"+attach.getUploadPath()+"/s_" + attach.getUuid()+"_"+ attach.getFileName());
 
 					Files.delete(thumbNail);
 				}
@@ -253,7 +217,7 @@ public class BoardController {
 	public ResponseEntity<List<AttachFileDTO>> uploadAjaxPost(MultipartFile[] uploadFile) {
 
 		List<AttachFileDTO> list = new ArrayList<>();
-		String uploadFolder = "C:\\upload";
+		String uploadFolder = "/Users/mac/upload";
 		log.info("upload-test");
 
 		String uploadFolderPath = getFolder();

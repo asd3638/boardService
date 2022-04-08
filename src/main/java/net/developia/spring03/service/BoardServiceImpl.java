@@ -32,15 +32,15 @@ public class BoardServiceImpl implements BoardService {
 
 		mapper.insertSelectKey(board);
 
-//		if (board.getAttachList() == null || board.getAttachList().size() <= 0) {
-//			return;
-//		}
-//
-//		board.getAttachList().forEach(attach -> {
-//
-//			attach.setBno(board.getBno());
-//			attachMapper.insert(attach);
-//		});
+		if (board.getAttachList() == null || board.getAttachList().size() <= 0) {
+			return;
+		}
+
+		board.getAttachList().forEach(attach -> {
+
+			attach.setBno(board.getBno());
+			attachMapper.insert(attach);
+		});
 	}
 
 	@Override

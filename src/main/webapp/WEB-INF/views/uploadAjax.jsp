@@ -216,7 +216,7 @@
 		       
 		       var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
 		       
-		       var originPath = obj.uploadPath+ "\\"+obj.uuid +"_"+obj.fileName;
+		       var originPath = obj.uploadPath+ "/"+obj.uuid +"_"+obj.fileName;
 		       
 		       originPath = originPath.replace(new RegExp(/\\/g),"/");
 		       
