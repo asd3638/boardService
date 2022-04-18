@@ -8,16 +8,16 @@ import java.util.List;
 
 public interface ReplyService {
 
-	public int register(ReplyDTO replyDTO);
+	int register(ReplyDTO replyDTO);
 
-	public ReplyDTO get(Long rno);
+	ReplyDTO get(Long rno);
 
-	public int modify(ReplyDTO replyDTO);
+	int modify(ReplyDTO replyDTO);
 
-	public int remove(Long rno);
+	int remove(Long rno);
 
-	public List<ReplyDTO> getList(Criteria cri, Long bno);
+	List<ReplyDTO> getList(Criteria cri, Long bno);
 	
-	public ReplyPageDTO getListPage(Criteria cri, Long bno);
+	ReplyPageDTO getListPage(Criteria cri, Long bno);
 
 }

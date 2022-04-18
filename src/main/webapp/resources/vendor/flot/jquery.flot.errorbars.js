@@ -63,7 +63,7 @@ shadowSize and lineWidth are derived as well from the points series.
 */
 
 (function ($) {
-    var options = {
+    let options = {
         series: {
             points: {
                 errorbars: null, //should be 'x', 'y' or 'xy'
@@ -78,12 +78,12 @@ shadowSize and lineWidth are derived as well from the points series.
             return;
 
         // x,y values
-        var format = [
+        let format = [
             { x: true, number: true, required: true },
             { y: true, number: true, required: true }
         ];
 
-        var errors = series.points.errorbars;
+        let errors = series.points.errorbars;
         // error bars - first X then Y
         if (errors == 'x' || errors == 'xy') {
             // lower / upper error
@@ -106,17 +106,17 @@ shadowSize and lineWidth are derived as well from the points series.
 
     function parseErrors(series, i){
 
-        var points = series.datapoints.points;
+        let points = series.datapoints.points;
 
         // read errors from points array
-        var exl = null,
+        let exl = null,
                 exu = null,
                 eyl = null,
                 eyu = null;
-        var xerr = series.points.xerr,
+        let xerr = series.points.xerr,
                 yerr = series.points.yerr;
 
-        var eb = series.points.errorbars;
+        let eb = series.points.errorbars;
         // error bars - first X
         if (eb == 'x' || eb == 'xy') {
             if (xerr.asymmetric) {
@@ -146,7 +146,7 @@ shadowSize and lineWidth are derived as well from the points series.
         if (exu == null) exu = exl;
         if (eyu == null) eyu = eyl;
 
-        var errRanges = [exl, exu, eyl, eyu];
+        let errRanges = [exl, exu, eyl, eyu];
         // nullify if not showing
         if (!xerr.show){
             errRanges[0] = null;
@@ -161,48 +161,48 @@ shadowSize and lineWidth are derived as well from the points series.
 
     function drawSeriesErrors(plot, ctx, s){
 
-        var points = s.datapoints.points,
+        let points = s.datapoints.points,
                 ps = s.datapoints.pointsize,
                 ax = [s.xaxis, s.yaxis],
                 radius = s.points.radius,
                 err = [s.points.xerr, s.points.yerr];
 
         //sanity check, in case some inverted axis hack is applied to flot
-        var invertX = false;
+        let invertX = false;
         if (ax[0].p2c(ax[0].max) < ax[0].p2c(ax[0].min)) {
             invertX = true;
-            var tmp = err[0].lowerCap;
+            let tmp = err[0].lowerCap;
             err[0].lowerCap = err[0].upperCap;
             err[0].upperCap = tmp;
         }
 
-        var invertY = false;
+        let invertY = false;
         if (ax[1].p2c(ax[1].min) < ax[1].p2c(ax[1].max)) {
             invertY = true;
-            var tmp = err[1].lowerCap;
+            let tmp = err[1].lowerCap;
             err[1].lowerCap = err[1].upperCap;
             err[1].upperCap = tmp;
         }
 
-        for (var i = 0; i < s.datapoints.points.length; i += ps) {
+        for (let i = 0; i < s.datapoints.points.length; i += ps) {
 
             //parse
-            var errRanges = parseErrors(s, i);
+            let errRanges = parseErrors(s, i);
 
             //cycle xerr & yerr
-            for (var e = 0; e < err.length; e++){
+            for (let e = 0; e < err.length; e++){
 
-                var minmax = [ax[e].min, ax[e].max];
+                let minmax = [ax[e].min, ax[e].max];
 
                 //draw this error?
                 if (errRanges[e * err.length]){
 
                     //data coordinates
-                    var x = points[i],
+                    let x = points[i],
                         y = points[i + 1];
 
                     //errorbar ranges
-                    var upper = [x, y][e] + errRanges[e * err.length + 1],
+                    let upper = [x, y][e] + errRanges[e * err.length + 1],
                         lower = [x, y][e] - errRanges[e * err.length];
 
                     //points outside of the canvas
@@ -214,7 +214,7 @@ shadowSize and lineWidth are derived as well from the points series.
                             continue;
 
                     // prevent errorbars getting out of the canvas
-                    var drawUpper = true,
+                    let drawUpper = true,
                         drawLower = true;
 
                     if (upper > minmax[1]) {
@@ -229,7 +229,7 @@ shadowSize and lineWidth are derived as well from the points series.
                     //sanity check, in case some inverted axis hack is applied to flot
                     if ((err[e].err == 'x' && invertX) || (err[e].err == 'y' && invertY)) {
                         //swap coordinates
-                        var tmp = lower;
+                        let tmp = lower;
                         lower = upper;
                         upper = tmp;
                         tmp = drawLower;
@@ -249,12 +249,12 @@ shadowSize and lineWidth are derived as well from the points series.
                     minmax[1] = ax[e].p2c(minmax[1]);
 
                     //same style as points by default
-                    var lw = err[e].lineWidth ? err[e].lineWidth : s.points.lineWidth,
+                    let lw = err[e].lineWidth ? err[e].lineWidth : s.points.lineWidth,
                         sw = s.points.shadowSize != null ? s.points.shadowSize : s.shadowSize;
 
                     //shadow as for points
                     if (lw > 0 && sw > 0) {
-                        var w = sw / 2;
+                        let w = sw / 2;
                         ctx.lineWidth = w;
                         ctx.strokeStyle = "rgba(0,0,0,0.1)";
                         drawError(ctx, err[e], x, y, upper, lower, drawUpper, drawLower, radius, w + w/2, minmax);
@@ -322,13 +322,13 @@ shadowSize and lineWidth are derived as well from the points series.
     function drawPath(ctx, pts){
         ctx.beginPath();
         ctx.moveTo(pts[0][0], pts[0][1]);
-        for (var p=1; p < pts.length; p++)
+        for (let p=1; p < pts.length; p++)
             ctx.lineTo(pts[p][0], pts[p][1]);
         ctx.stroke();
     }
 
     function draw(plot, ctx){
-        var plotOffset = plot.getPlotOffset();
+        let plotOffset = plot.getPlotOffset();
 
         ctx.save();
         ctx.translate(plotOffset.left, plotOffset.top);

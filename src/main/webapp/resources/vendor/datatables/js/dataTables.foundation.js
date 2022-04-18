@@ -37,10 +37,10 @@
 	}
 }(function( $, window, document, undefined ) {
 'use strict';
-var DataTable = $.fn.dataTable;
+let DataTable = $.fn.dataTable;
 
 // Detect Foundation 5 / 6 as they have different element and class requirements
-var meta = $('<meta class="foundation-mq"/>').appendTo('head');
+let meta = $('<meta class="foundation-mq"/>').appendTo('head');
 DataTable.ext.foundationVersion = meta.css('font-family').match(/small|medium|large/) ? 6 : 5;
 meta.remove();
 
@@ -63,17 +63,17 @@ $.extend( true, DataTable.defaults, {
 
 /* Page button renderer */
 DataTable.ext.renderer.pageButton.foundation = function ( settings, host, idx, buttons, page, pages ) {
-	var api = new DataTable.Api( settings );
-	var classes = settings.oClasses;
-	var lang = settings.oLanguage.oPaginate;
-	var aria = settings.oLanguage.oAria.paginate || {};
-	var btnDisplay, btnClass;
-	var tag;
-	var v5 = DataTable.ext.foundationVersion === 5;
+	let api = new DataTable.Api( settings );
+	let classes = settings.oClasses;
+	let lang = settings.oLanguage.oPaginate;
+	let aria = settings.oLanguage.oAria.paginate || {};
+	let btnDisplay, btnClass;
+	let tag;
+	let v5 = DataTable.ext.foundationVersion === 5;
 
-	var attach = function( container, buttons ) {
-		var i, ien, node, button;
-		var clickHandler = function ( e ) {
+	let attach = function( container, buttons ) {
+		let i, ien, node, button;
+		let clickHandler = function ( e ) {
 			e.preventDefault();
 			if ( !$(e.currentTarget).hasClass('unavailable') && api.page() != e.data.action ) {
 				api.page( e.data.action ).draw( 'page' );

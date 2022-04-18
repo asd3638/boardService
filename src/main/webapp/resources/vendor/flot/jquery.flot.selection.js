@@ -80,7 +80,7 @@ The plugin allso adds the following methods to the plot object:
 
 (function ($) {
     function init(plot) {
-        var selection = {
+        let selection = {
                 first: { x: -1, y: -1}, second: { x: -1, y: -1},
                 show: false,
                 active: false
@@ -91,9 +91,9 @@ The plugin allso adds the following methods to the plot object:
         // the navigation plugin, this should be massaged a bit to fit
         // the Flot cases here better and reused. Doing this would
         // make this plugin much slimmer.
-        var savedhandlers = {};
+        let savedhandlers = {};
 
-        var mouseUpHandler = null;
+        let mouseUpHandler = null;
         
         function onMouseMove(e) {
             if (selection.active) {
@@ -161,10 +161,10 @@ The plugin allso adds the following methods to the plot object:
             
             if (!selection.show) return null;
 
-            var r = {}, c1 = selection.first, c2 = selection.second;
+            let r = {}, c1 = selection.first, c2 = selection.second;
             $.each(plot.getAxes(), function (name, axis) {
                 if (axis.used) {
-                    var p1 = axis.c2p(c1[axis.direction]), p2 = axis.c2p(c2[axis.direction]); 
+                    let p1 = axis.c2p(c1[axis.direction]), p2 = axis.c2p(c2[axis.direction]); 
                     r[name] = { from: Math.min(p1, p2), to: Math.max(p1, p2) };
                 }
             });
@@ -172,7 +172,7 @@ The plugin allso adds the following methods to the plot object:
         }
 
         function triggerSelectedEvent() {
-            var r = getSelection();
+            let r = getSelection();
 
             plot.getPlaceholder().trigger("plotselected", [ r ]);
 
@@ -186,9 +186,9 @@ The plugin allso adds the following methods to the plot object:
         }
 
         function setSelectionPos(pos, e) {
-            var o = plot.getOptions();
-            var offset = plot.getPlaceholder().offset();
-            var plotOffset = plot.getPlotOffset();
+            let o = plot.getOptions();
+            let offset = plot.getPlaceholder().offset();
+            let plotOffset = plot.getPlotOffset();
             pos.x = clamp(0, e.pageX - offset.left - plotOffset.left, plot.width());
             pos.y = clamp(0, e.pageY - offset.top - plotOffset.top, plot.height());
 
@@ -223,9 +223,9 @@ The plugin allso adds the following methods to the plot object:
 
         // function taken from markings support in Flot
         function extractRange(ranges, coord) {
-            var axis, from, to, key, axes = plot.getAxes();
+            let axis, from, to, key, axes = plot.getAxes();
 
-            for (var k in axes) {
+            for (let k in axes) {
                 axis = axes[k];
                 if (axis.direction == coord) {
                     key = coord + axis.n + "axis";
@@ -248,7 +248,7 @@ The plugin allso adds the following methods to the plot object:
 
             // auto-reverse as an added bonus
             if (from != null && to != null && from > to) {
-                var tmp = from;
+                let tmp = from;
                 from = to;
                 to = tmp;
             }
@@ -257,7 +257,7 @@ The plugin allso adds the following methods to the plot object:
         }
         
         function setSelection(ranges, preventEvent) {
-            var axis, range, o = plot.getOptions();
+            let axis, range, o = plot.getOptions();
 
             if (o.selection.mode == "y") {
                 selection.first.x = 0;
@@ -288,7 +288,7 @@ The plugin allso adds the following methods to the plot object:
         }
 
         function selectionIsSane() {
-            var minSize = plot.getOptions().selection.minSize;
+            let minSize = plot.getOptions().selection.minSize;
             return Math.abs(selection.second.x - selection.first.x) >= minSize &&
                 Math.abs(selection.second.y - selection.first.y) >= minSize;
         }
@@ -298,7 +298,7 @@ The plugin allso adds the following methods to the plot object:
         plot.getSelection = getSelection;
 
         plot.hooks.bindEvents.push(function(plot, eventHolder) {
-            var o = plot.getOptions();
+            let o = plot.getOptions();
             if (o.selection.mode != null) {
                 eventHolder.mousemove(onMouseMove);
                 eventHolder.mousedown(onMouseDown);
@@ -309,20 +309,20 @@ The plugin allso adds the following methods to the plot object:
         plot.hooks.drawOverlay.push(function (plot, ctx) {
             // draw selection
             if (selection.show && selectionIsSane()) {
-                var plotOffset = plot.getPlotOffset();
-                var o = plot.getOptions();
+                let plotOffset = plot.getPlotOffset();
+                let o = plot.getOptions();
 
                 ctx.save();
                 ctx.translate(plotOffset.left, plotOffset.top);
 
-                var c = $.color.parse(o.selection.color);
+                let c = $.color.parse(o.selection.color);
 
                 ctx.strokeStyle = c.scale('a', 0.8).toString();
                 ctx.lineWidth = 1;
                 ctx.lineJoin = o.selection.shape;
                 ctx.fillStyle = c.scale('a', 0.4).toString();
 
-                var x = Math.min(selection.first.x, selection.second.x) + 0.5,
+                let x = Math.min(selection.first.x, selection.second.x) + 0.5,
                     y = Math.min(selection.first.y, selection.second.y) + 0.5,
                     w = Math.abs(selection.second.x - selection.first.x) - 1,
                     h = Math.abs(selection.second.y - selection.first.y) - 1;

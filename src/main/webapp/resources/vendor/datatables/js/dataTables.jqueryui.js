@@ -37,11 +37,11 @@
 	}
 }(function( $, window, document, undefined ) {
 'use strict';
-var DataTable = $.fn.dataTable;
+let DataTable = $.fn.dataTable;
 
 
-var sort_prefix = 'css_right ui-icon ui-icon-';
-var toolbar_prefix = 'fg-toolbar ui-toolbar ui-widget-header ui-helper-clearfix ui-corner-';
+let sort_prefix = 'css_right ui-icon ui-icon-';
+let toolbar_prefix = 'fg-toolbar ui-toolbar ui-widget-header ui-helper-clearfix ui-corner-';
 
 /* Set the defaults for DataTables initialisation */
 $.extend( true, DataTable.defaults, {
@@ -86,9 +86,9 @@ $.extend( DataTable.ext.classes, {
 
 DataTable.ext.renderer.header.jqueryui = function ( settings, cell, column, classes ) {
 	// Calculate what the unsorted class should be
-	var noSortAppliedClass = sort_prefix+'carat-2-n-s';
-	var asc = $.inArray('asc', column.asSorting) !== -1;
-	var desc = $.inArray('desc', column.asSorting) !== -1;
+	let noSortAppliedClass = sort_prefix+'carat-2-n-s';
+	let asc = $.inArray('asc', column.asSorting) !== -1;
+	let desc = $.inArray('desc', column.asSorting) !== -1;
 
 	if ( !column.bSortable || (!asc && !desc) ) {
 		noSortAppliedClass = '';
@@ -115,7 +115,7 @@ DataTable.ext.renderer.header.jqueryui = function ( settings, cell, column, clas
 			return;
 		}
 
-		var colIdx = column.idx;
+		let colIdx = column.idx;
 
 		cell
 			.removeClass( classes.sSortAsc +" "+classes.sSortDesc )

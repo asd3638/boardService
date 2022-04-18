@@ -2,8 +2,10 @@ package net.developia.spring03.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
-import net.coobird.thumbnailator.Thumbnailator;
-import net.developia.spring03.dto.*;
+import net.developia.spring03.dto.BoardAttachDTO;
+import net.developia.spring03.dto.BoardDTO;
+import net.developia.spring03.dto.Criteria;
+import net.developia.spring03.dto.PageDTO;
 import net.developia.spring03.service.BoardService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,25 +13,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Controller
 @Log4j
@@ -65,7 +58,7 @@ public class BoardController {
 
 		if (board.getAttachList() != null) {
 
-			board.getAttachList().forEach(attach -> log.info(attach));
+			board.getAttachList().forEach(log::info);
 
 		}
 
@@ -81,7 +74,7 @@ public class BoardController {
 	@GetMapping("/get")
 	public String get(@RequestParam("bno") Long bno, @ModelAttribute("cri") Criteria cri, HttpServletRequest request, HttpServletResponse response, Model model) {
 
-		log.info("/get or modify");
+		log.info("/get");
 		log.info(LocalDate.now());
 		System.out.println("=====================");
 		System.out.println(LocalDate.now());
@@ -93,7 +86,7 @@ public class BoardController {
 		{
 			for (int i = 0; i < cookies.length; i++)
 			{
-				// Cookie의 name이 cookie + reviewNo와 일치하는 쿠키를 viewCookie에 넣어줌
+				// Cookie의 name이 cookie + 이름이 일치하는 쿠키를 viewCookie에 넣어줌
 				if (cookies[i].getName().equals("cookie"+bno))
 				{
 					System.out.println("처음 쿠키가 생성한 뒤 들어옴.");
@@ -130,22 +123,13 @@ public class BoardController {
 
 	@GetMapping("/modify")
 	public void getModify(@RequestParam("bno") Long bno, @ModelAttribute("cri") Criteria cri, Model model) {
-
-		log.info("/get or modify");
-		log.info(LocalDate.now());
-		System.out.println("=====================");
-		System.out.println(LocalDate.now());
-
 		BoardDTO boardDTO = service.get(bno);
 		model.addAttribute("board", boardDTO);
 	}
 
-
-
 	@PostMapping("/modify")
 	public String modify(BoardDTO board, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
-		log.info("modify:" + board);
-		log.info(LocalDate.now());
+
 		board.setUpdateDate(java.sql.Date.valueOf(LocalDate.now()));
 
 		if (service.modify(board)) {
@@ -165,7 +149,13 @@ public class BoardController {
 
 		log.info("remove..." + bno);
 
+		List<BoardAttachDTO> attachList = service.getAttachList(bno);
+
 		if (service.remove(bno)) {
+
+			// delete Attach Files
+			deleteFiles(attachList);
+
 			rttr.addFlashAttribute("result", "success");
 		}
 		return "redirect:/board/list" + cri.getListLink();
@@ -182,13 +172,13 @@ public class BoardController {
 
 		attachList.forEach(attach -> {
 			try {
-				Path file  = Paths.get("/Users/mac/"+attach.getUploadPath()+"/" + attach.getUuid()+"_"+ attach.getFileName());
+				Path file  = Paths.get("/Users/mac/upload/"+attach.getUploadPath()+"/" + attach.getUuid()+"_"+ attach.getFileName());
 
 				Files.deleteIfExists(file);
 
 				if(Files.probeContentType(file).startsWith("image")) {
 
-					Path thumbNail = Paths.get("/Users/mac/"+attach.getUploadPath()+"/s_" + attach.getUuid()+"_"+ attach.getFileName());
+					Path thumbNail = Paths.get("/Users/mac/upload/"+attach.getUploadPath()+"/s_" + attach.getUuid()+"_"+ attach.getFileName());
 
 					Files.delete(thumbNail);
 				}
@@ -199,8 +189,6 @@ public class BoardController {
 		});//end foreachd
 	}
 
-
-
 	@GetMapping(value = "/getAttachList",
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
@@ -210,85 +198,6 @@ public class BoardController {
 
 		return new ResponseEntity<>(service.getAttachList(bno), HttpStatus.OK);
 
-	}
-
-	@PostMapping(value = "/uploadAjaxAction", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, headers = ("content-type=multipart/*"))
-	@ResponseBody
-	public ResponseEntity<List<AttachFileDTO>> uploadAjaxPost(MultipartFile[] uploadFile) {
-
-		List<AttachFileDTO> list = new ArrayList<>();
-		String uploadFolder = "/Users/mac/upload";
-		log.info("upload-test");
-
-		String uploadFolderPath = getFolder();
-		// make folder --------
-		File uploadPath = new File(uploadFolder, uploadFolderPath);
-
-		if (!uploadPath.exists()) {
-			uploadPath.mkdirs();
-		}
-
-		for (MultipartFile multipartFile : uploadFile) {
-
-			AttachFileDTO attachDTO = new AttachFileDTO();
-
-			String uploadFileName = multipartFile.getOriginalFilename();
-
-			// IE has file path
-			uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\") + 1);
-			log.info("only file name: " + uploadFileName);
-			attachDTO.setFileName(uploadFileName);
-
-			UUID uuid = UUID.randomUUID();
-
-			uploadFileName = uuid.toString() + "_" + uploadFileName;
-
-			try {
-				File saveFile = new File(uploadPath, uploadFileName);
-				multipartFile.transferTo(saveFile);
-
-				attachDTO.setUuid(uuid.toString());
-				attachDTO.setUploadPath(uploadFolderPath);
-
-				// check image type file
-				if (checkImageType(saveFile)) {
-
-					attachDTO.setImage(true);
-
-					FileOutputStream thumbnail = new FileOutputStream(new File(uploadPath, "s_" + uploadFileName));
-
-					Thumbnailator.createThumbnail(multipartFile.getInputStream(), thumbnail, 100, 100);
-
-					thumbnail.close();
-				}
-
-				// add to List
-				list.add(attachDTO);
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-		} // end for
-		return new ResponseEntity<>(list, HttpStatus.OK);
-	}
-
-	private String getFolder() {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Date date = new Date();
-		String str = sdf.format(date);
-		return str.replace("-", File.separator);
-	}
-
-	private boolean checkImageType(File file) {
-		try {
-			String contentType = Files.probeContentType(file.toPath());
-			return contentType.startsWith("image");
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return false;
 	}
 
 }

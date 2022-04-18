@@ -2,14 +2,14 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<!-- 현재 년도 날짜 -->
+<!-- 현재 날짜 -->
 <c:set var="now" value="<%=new java.util.Date()%>"/>
 <c:set var="nowDate"><fmt:formatDate value="${now}" pattern="yyyyMMdd" /></c:set>
 
 <%@include file="../includes/header.jsp"%>
 <div class="row">
 	<div class="col-lg-12">
-		<h1 class="page-header">Tables</h1>
+		<h1 class="page-header">Board</h1>
 	</div>
 </div>
 <!-- /.row -->
@@ -27,15 +27,15 @@
 			<!-- /.panel-heading -->
 			<div class="panel-body">
 				<table class="table table-striped table-bordered table-hover">
-					<thead>
+					<thead style="background-color: antiquewhite;">
 						<tr>
-							<th>번호</th>
-							<th>제목</th>
-							<th>작성자</th>
-							<th>내용</th>
+							<th style="width: 5%;">번호</th>
+							<th style="width: 10%;">제목</th>
+							<th style="width: 10%;">작성자</th>
+							<th style="width: 50%;">내용</th>
 							<th>작성일</th>
 							<th>수정일</th>
-							<th>조회수</th>
+							<th style="width: 7%;">조회수</th>
 						</tr>
 					</thead>
 
@@ -46,7 +46,8 @@
 							<td><c:out value="${board.bno}" /></td>
 							<%-- <td><a href='/board/get?bno=<c:out value="${board.bno}"/>'><c:out value="${board.title}"/></a></td> --%>
 
-							<td><a href="get?pageNum=${pageMaker.cri.pageNum}&amount=${pageMaker.cri.amount}&bno=${board.bno}"/>
+							<td><a style="    color: burlywood; text-decoration: none;"
+									href="get?pageNum=${pageMaker.cri.pageNum}&amount=${pageMaker.cri.amount}&bno=${board.bno}"/>
 									<c:out value="${board.title}" />
 							</a></td>
 
@@ -55,7 +56,7 @@
 							<c:choose>
 
 								<c:when test="${nowDate > regDate}">
-									<td><fmt:formatDate value="${board.regDate}" pattern="yyyy.MM.dd" /></td>
+									<td><fmt:formatDate value="${board.regDate}" pattern="yyyy-MM-dd" /></td>
 								</c:when>
 								<c:otherwise>
 									<td><fmt:formatDate value="${board.regDate}" pattern="HH:mm:ss" /></td>
@@ -63,7 +64,7 @@
 							</c:choose>
 							<c:choose>
 								<c:when test="${nowDate > updateDate}">
-									<td><fmt:formatDate value="${board.updateDate}" pattern="yyyy.MM.dd" /></td>
+									<td><fmt:formatDate value="${board.updateDate}" pattern="yyyy-MM-dd" /></td>
 								</c:when>
 								<c:otherwise>
 									<td><fmt:formatDate value="${board.updateDate}" pattern="HH:mm:ss" /></td>
@@ -164,7 +165,7 @@
 	$(document)
 			.ready(
 					function() {
-						var result = '<c:out value="${result}"/>';
+						let result = '<c:out value="${result}"/>';
 						console.log('<c:out value="${pageMaker}"/>');
 						checkModal(result);
 
@@ -197,7 +198,7 @@
 
 						});
 
-						var actionForm = $("#actionForm");
+						let actionForm = $("#actionForm");
 
 						$(".paginate_button a").on(
 								"click",
@@ -229,7 +230,7 @@
 
 										});
 
-						var searchForm = $("#searchForm");
+						let searchForm = $("#searchForm");
 
 						$("#searchForm button").on(
 								"click",
@@ -263,4 +264,3 @@
 
 
 
-<%@include file="../includes/footer.jsp"%>

@@ -43,13 +43,13 @@ You may need to check for this in hover events.
 */
 
 (function ($) {
-    var options = {
+    let options = {
         series: { threshold: null } // or { below: number, color: color spec}
     };
     
     function init(plot) {
         function thresholdData(plot, s, datapoints, below, color) {
-            var ps = datapoints.pointsize, i, x, y, p, prevp,
+            let ps = datapoints.pointsize, i, x, y, p, prevp,
                 thresholded = $.extend({}, s); // note: shallow copy
 
             thresholded.datapoints = { points: [], pointsize: ps, format: datapoints.format };
@@ -59,12 +59,12 @@ You may need to check for this in hover events.
             thresholded.originSeries = s;
             thresholded.data = [];
  
-            var origpoints = datapoints.points,
+            let origpoints = datapoints.points,
                 addCrossingPoints = s.lines.show;
 
-            var threspoints = [];
-            var newpoints = [];
-            var m;
+            let threspoints = [];
+            let newpoints = [];
+            let m;
 
             for (i = 0; i < origpoints.length; i += ps) {
                 x = origpoints[i];
@@ -78,7 +78,7 @@ You may need to check for this in hover events.
 
                 if (addCrossingPoints && prevp != p && x != null
                     && i > 0 && origpoints[i - ps] != null) {
-                    var interx = x + (below - y) * (x - origpoints[i - ps]) / (y - origpoints[i - ps + 1]);
+                    let interx = x + (below - y) * (x - origpoints[i - ps]) / (y - origpoints[i - ps + 1]);
                     prevp.push(interx);
                     prevp.push(below);
                     for (m = 2; m < ps; ++m)
@@ -104,7 +104,7 @@ You may need to check for this in hover events.
             thresholded.datapoints.points = threspoints;
             
             if (thresholded.datapoints.points.length > 0) {
-                var origIndex = $.inArray(s, plot.getData());
+                let origIndex = $.inArray(s, plot.getData());
                 // Insert newly-generated series right after original one (to prevent it from becoming top-most)
                 plot.getData().splice(origIndex + 1, 0, thresholded);
             }

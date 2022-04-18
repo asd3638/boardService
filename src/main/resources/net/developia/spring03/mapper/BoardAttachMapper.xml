@@ -6,27 +6,33 @@
 
 	<insert id="insert">
 		insert into tbl_attach (uuid, uploadpath, filename,
-		filetype, bno)
+								filetype, bno)
 		values (#{uuid}, #{uploadPath}, #{fileName},
-		#{fileType}, #{bno} )
+				#{fileType}, #{bno} )
 	</insert>
 
 	<delete id="delete">
+
 		delete from tbl_attach where uuid = #{uuid}
+
 	</delete>
 
 	<select id="findByBno"
-		resultType="net.developia.spring03.dto.BoardAttachDTO">
+			resultType="net.developia.spring03.dto.BoardAttachDTO">
 		select * from tbl_attach where bno = #{bno}
 	</select>
 
 	<delete id="deleteAll">
+
 		delete tbl_attach where bno = #{bno}
+
 	</delete>
 
 	<select id="getOldFiles"
-		resultType="net.developia.spring03.dto.BoardAttachDTO">
+			resultType="net.developia.spring03.dto.BoardAttachDTO">
+
 		select * from tbl_attach where uploadpath = to_char(sysdate -1 ,'yyyy\mm\dd')
+
 	</select>
 
 

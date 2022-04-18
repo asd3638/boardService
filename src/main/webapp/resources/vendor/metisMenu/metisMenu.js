@@ -8,7 +8,7 @@
  */
 ;(function($, window, document, undefined) {
 
-    var pluginName = "metisMenu",
+    let pluginName = "metisMenu",
         defaults = {
             toggle: true,
             doubleTapToGo: false
@@ -25,7 +25,7 @@
     Plugin.prototype = {
         init: function() {
 
-            var $this = this.element,
+            let $this = this.element,
                 $toggle = this.settings.toggle,
                 obj = this;
 
@@ -66,7 +66,7 @@
         },
 
         isIE: function() { //https://gist.github.com/padolsey/527683
-            var undef,
+            let undef,
                 v = 3,
                 div = document.createElement("div"),
                 all = div.getElementsByTagName("i");
@@ -81,7 +81,7 @@
 
         //Enable the link on the second click.
         doubleTapToGo: function(elem) {
-            var $this = this.element;
+            let $this = this.element;
 
             //if the class "doubleTapToGo" exists, remove it and return
             if (elem.hasClass("doubleTapToGo")) {
@@ -108,7 +108,7 @@
 
     $.fn[pluginName] = function(options) {
         this.each(function () {
-            var el = $(this);
+            let el = $(this);
             if (el.data(pluginName)) {
                 el.data(pluginName).remove();
             }

@@ -9,7 +9,7 @@
  * Examples:
  *
  *   $.color.parse("#fff").scale('rgb', 0.25).add('a', -0.5).toString()
- *   var c = $.color.extract($("#mydiv"), 'background-color');
+ *   let c = $.color.extract($("#mydiv"), 'background-color');
  *   console.log(c.r, c.g, c.b, c.a);
  *   $.color.make(100, 50, 25, 0.4).toString() // returns "rgba(100,50,25,0.4)"
  *
@@ -25,20 +25,20 @@
 
     // construct color object with some convenient chainable helpers
     $.color.make = function (r, g, b, a) {
-        var o = {};
+        let o = {};
         o.r = r || 0;
         o.g = g || 0;
         o.b = b || 0;
         o.a = a != null ? a : 1;
 
         o.add = function (c, d) {
-            for (var i = 0; i < c.length; ++i)
+            for (let i = 0; i < c.length; ++i)
                 o[c.charAt(i)] += d;
             return o.normalize();
         };
         
         o.scale = function (c, f) {
-            for (var i = 0; i < c.length; ++i)
+            for (let i = 0; i < c.length; ++i)
                 o[c.charAt(i)] *= f;
             return o.normalize();
         };
@@ -73,7 +73,7 @@
     // extract CSS color property from element, going up in the DOM
     // if it's "transparent"
     $.color.extract = function (elem, css) {
-        var c;
+        let c;
 
         do {
             c = elem.css(css).toLowerCase();
@@ -95,7 +95,7 @@
     // returns color object, if parsing failed, you get black (0, 0,
     // 0) out
     $.color.parse = function (str) {
-        var res, m = $.color.make;
+        let res, m = $.color.make;
 
         // Look for rgb(num,num,num)
         if (res = /rgb\(\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*\)/.exec(str))
@@ -122,7 +122,7 @@
             return m(parseInt(res[1]+res[1], 16), parseInt(res[2]+res[2], 16), parseInt(res[3]+res[3], 16));
 
         // Otherwise, we're most likely dealing with a named color
-        var name = $.trim(str).toLowerCase();
+        let name = $.trim(str).toLowerCase();
         if (name == "transparent")
             return m(255, 255, 255, 0);
         else {
@@ -132,7 +132,7 @@
         }
     }
     
-    var lookupColors = {
+    let lookupColors = {
         aqua:[0,255,255],
         azure:[240,255,255],
         beige:[245,245,220],

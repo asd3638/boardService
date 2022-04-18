@@ -10,7 +10,7 @@ plugin to compute it for you.
 
 In order to name the other series, you need to give it an id, like this:
 
-	var dataset = [
+	let dataset = [
 		{ data: [ ... ], id: "foo" } ,         // use default bottom
 		{ data: [ ... ], fillBetween: "foo" }, // use first dataset as bottom
 	];
@@ -31,7 +31,7 @@ jquery.flot.stack.js plugin, possibly some code could be shared.
 
 (function ( $ ) {
 
-	var options = {
+	let options = {
 		series: {
 			fillBetween: null	// or number
 		}
@@ -41,7 +41,7 @@ jquery.flot.stack.js plugin, possibly some code could be shared.
 
 		function findBottomSeries( s, allseries ) {
 
-			var i;
+			let i;
 
 			for ( i = 0; i < allseries.length; ++i ) {
 				if ( allseries[ i ].id === s.fillBetween ) {
@@ -65,13 +65,13 @@ jquery.flot.stack.js plugin, possibly some code could be shared.
 				return;
 			}
 
-			var other = findBottomSeries( s, plot.getData() );
+			let other = findBottomSeries( s, plot.getData() );
 
 			if ( !other ) {
 				return;
 			}
 
-			var ps = datapoints.pointsize,
+			let ps = datapoints.pointsize,
 				points = datapoints.points,
 				otherps = other.datapoints.pointsize,
 				otherpoints = other.datapoints.points,

@@ -6,12 +6,12 @@ Licensed under the BSD-2-Clause License.
 
 
 (function() {
-  var $, Morris, minutesSpecHelper, secondsSpecHelper,
+  let $, Morris, minutesSpecHelper, secondsSpecHelper,
     __slice = [].slice,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+    __extends = function(child, parent) { for (let key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    __indexOf = [].indexOf || function(item) { for (let i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   Morris = window.Morris = {};
 
@@ -32,7 +32,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     EventEmitter.prototype.fire = function() {
-      var args, handler, name, _i, _len, _ref, _results;
+      let args, handler, name, _i, _len, _ref, _results;
       name = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
       if ((this.handlers != null) && (this.handlers[name] != null)) {
         _ref = this.handlers[name];
@@ -50,7 +50,7 @@ Licensed under the BSD-2-Clause License.
   })();
 
   Morris.commas = function(num) {
-    var absnum, intnum, ret, strabsnum;
+    let absnum, intnum, ret, strabsnum;
     if (num != null) {
       ret = num < 0 ? "-" : "";
       absnum = Math.abs(num);
@@ -75,7 +75,7 @@ Licensed under the BSD-2-Clause License.
 
     function Grid(options) {
       this.resizeHandler = __bind(this.resizeHandler, this);
-      var _this = this;
+      let _this = this;
       if (typeof options.element === 'string') {
         this.el = $(document.getElementById(options.element));
       } else {
@@ -101,7 +101,7 @@ Licensed under the BSD-2-Clause License.
       }
       this.setData(this.options.data);
       this.el.bind('mousemove', function(evt) {
-        var left, offset, right, width, x;
+        let left, offset, right, width, x;
         offset = _this.el.offset();
         x = evt.pageX - offset.left;
         if (_this.selectFrom) {
@@ -124,13 +124,13 @@ Licensed under the BSD-2-Clause License.
         return _this.fire('hoverout');
       });
       this.el.bind('touchstart touchmove touchend', function(evt) {
-        var offset, touch;
+        let offset, touch;
         touch = evt.originalEvent.touches[0] || evt.originalEvent.changedTouches[0];
         offset = _this.el.offset();
         return _this.fire('hovermove', touch.pageX - offset.left, touch.pageY - offset.top);
       });
       this.el.bind('click', function(evt) {
-        var offset;
+        let offset;
         offset = _this.el.offset();
         return _this.fire('gridclick', evt.pageX - offset.left, evt.pageY - offset.top);
       });
@@ -140,12 +140,12 @@ Licensed under the BSD-2-Clause License.
           stroke: false
         }).toBack().hide();
         this.el.bind('mousedown', function(evt) {
-          var offset;
+          let offset;
           offset = _this.el.offset();
           return _this.startRange(evt.pageX - offset.left);
         });
         this.el.bind('mouseup', function(evt) {
-          var offset;
+          let offset;
           offset = _this.el.offset();
           _this.endRange(evt.pageX - offset.left);
           return _this.fire('hovermove', evt.pageX - offset.left, evt.pageY - offset.top);
@@ -197,7 +197,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Grid.prototype.setData = function(data, redraw) {
-      var e, idx, index, maxGoal, minGoal, ret, row, step, total, y, ykey, ymax, ymin, yval, _ref;
+      let e, idx, index, maxGoal, minGoal, ret, row, step, total, y, ykey, ymax, ymin, yval, _ref;
       if (redraw == null) {
         redraw = true;
       }
@@ -219,7 +219,7 @@ Licensed under the BSD-2-Clause License.
         ymax = ymax != null ? Math.max(ymax, maxGoal) : maxGoal;
       }
       this.data = (function() {
-        var _i, _len, _results;
+        let _i, _len, _results;
         _results = [];
         for (index = _i = 0, _len = data.length; _i < _len; index = ++_i) {
           row = data[index];
@@ -242,7 +242,7 @@ Licensed under the BSD-2-Clause License.
           }
           total = 0;
           ret.y = (function() {
-            var _j, _len1, _ref, _results1;
+            let _j, _len1, _ref, _results1;
             _ref = this.options.ykeys;
             _results1 = [];
             for (idx = _j = 0, _len1 = _ref.length; _j < _len1; idx = ++_j) {
@@ -289,7 +289,7 @@ Licensed under the BSD-2-Clause License.
       if (this.options.events.length > 0) {
         if (this.options.parseTime) {
           this.events = (function() {
-            var _i, _len, _ref, _results;
+            let _i, _len, _ref, _results;
             _ref = this.options.events;
             _results = [];
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -324,7 +324,7 @@ Licensed under the BSD-2-Clause License.
         } else {
           step = (this.ymax - this.ymin) / (this.options.numLines - 1);
           this.grid = (function() {
-            var _i, _ref1, _ref2, _results;
+            let _i, _ref1, _ref2, _results;
             _results = [];
             for (y = _i = _ref1 = this.ymin, _ref2 = this.ymax; step > 0 ? _i <= _ref2 : _i >= _ref2; y = _i += step) {
               _results.push(y);
@@ -340,7 +340,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Grid.prototype.yboundary = function(boundaryType, currentValue) {
-      var boundaryOption, suggestedValue;
+      let boundaryOption, suggestedValue;
       boundaryOption = this.options["y" + boundaryType];
       if (typeof boundaryOption === 'string') {
         if (boundaryOption.slice(0, 4) === 'auto') {
@@ -366,7 +366,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Grid.prototype.autoGridLines = function(ymin, ymax, nlines) {
-      var gmax, gmin, grid, smag, span, step, unit, y, ymag;
+      let gmax, gmin, grid, smag, span, step, unit, y, ymag;
       span = ymax - ymin;
       ymag = Math.floor(Math.log(span) / Math.log(10));
       unit = Math.pow(10, ymag);
@@ -384,7 +384,7 @@ Licensed under the BSD-2-Clause License.
       if (step < 1) {
         smag = Math.floor(Math.log(step) / Math.log(10));
         grid = (function() {
-          var _i, _results;
+          let _i, _results;
           _results = [];
           for (y = _i = gmin; step > 0 ? _i <= gmax : _i >= gmax; y = _i += step) {
             _results.push(parseFloat(y.toFixed(1 - smag)));
@@ -393,7 +393,7 @@ Licensed under the BSD-2-Clause License.
         })();
       } else {
         grid = (function() {
-          var _i, _results;
+          let _i, _results;
           _results = [];
           for (y = _i = gmin; step > 0 ? _i <= gmax : _i >= gmax; y = _i += step) {
             _results.push(y);
@@ -405,7 +405,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Grid.prototype._calc = function() {
-      var bottomOffsets, gridLine, h, i, w, yLabelWidths, _ref, _ref1;
+      let bottomOffsets, gridLine, h, i, w, yLabelWidths, _ref, _ref1;
       w = this.el.width();
       h = this.el.height();
       if (this.elementWidth !== w || this.elementHeight !== h || this.dirty) {
@@ -418,7 +418,7 @@ Licensed under the BSD-2-Clause License.
         this.bottom = this.elementHeight - this.options.padding;
         if ((_ref = this.options.axes) === true || _ref === 'both' || _ref === 'y') {
           yLabelWidths = (function() {
-            var _i, _len, _ref1, _results;
+            let _i, _len, _ref1, _results;
             _ref1 = this.grid;
             _results = [];
             for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
@@ -431,7 +431,7 @@ Licensed under the BSD-2-Clause License.
         }
         if ((_ref1 = this.options.axes) === true || _ref1 === 'both' || _ref1 === 'x') {
           bottomOffsets = (function() {
-            var _i, _ref2, _results;
+            let _i, _ref2, _results;
             _results = [];
             for (i = _i = 0, _ref2 = this.data.length; 0 <= _ref2 ? _i < _ref2 : _i > _ref2; i = 0 <= _ref2 ? ++_i : --_i) {
               _results.push(this.measureText(this.data[i].text, -this.options.xLabelAngle).height);
@@ -474,7 +474,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Grid.prototype.measureText = function(text, angle) {
-      var ret, tt;
+      let ret, tt;
       if (angle == null) {
         angle = 0;
       }
@@ -497,7 +497,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Grid.prototype.drawGrid = function() {
-      var lineY, y, _i, _len, _ref, _ref1, _ref2, _results;
+      let lineY, y, _i, _len, _ref, _ref1, _ref2, _results;
       if (this.options.grid === false && ((_ref = this.options.axes) !== true && _ref !== 'both' && _ref !== 'y')) {
         return;
       }
@@ -519,7 +519,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Grid.prototype.drawGoals = function() {
-      var color, goal, i, _i, _len, _ref, _results;
+      let color, goal, i, _i, _len, _ref, _results;
       _ref = this.options.goals;
       _results = [];
       for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
@@ -531,7 +531,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Grid.prototype.drawEvents = function() {
-      var color, event, i, _i, _len, _ref, _results;
+      let color, event, i, _i, _len, _ref, _results;
       _ref = this.events;
       _results = [];
       for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
@@ -568,7 +568,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Grid.prototype.endRange = function(x) {
-      var end, start;
+      let end, start;
       if (this.selectFrom) {
         start = Math.min(this.selectFrom, x);
         end = Math.max(this.selectFrom, x);
@@ -591,7 +591,7 @@ Licensed under the BSD-2-Clause License.
   })(Morris.EventEmitter);
 
   Morris.parseDate = function(date) {
-    var isecs, m, msecs, n, o, offsetmins, p, q, r, ret, secs;
+    let isecs, m, msecs, n, o, offsetmins, p, q, r, ret, secs;
     if (typeof date === 'number') {
       return date;
     }
@@ -677,7 +677,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Hover.prototype.moveTo = function(x, y) {
-      var hoverHeight, hoverWidth, left, parentHeight, parentWidth, top;
+      let hoverHeight, hoverWidth, left, parentHeight, parentWidth, top;
       parentWidth = this.options.parent.innerWidth();
       parentHeight = this.options.parent.innerHeight();
       hoverWidth = this.el.outerWidth();
@@ -757,14 +757,14 @@ Licensed under the BSD-2-Clause License.
     };
 
     Line.prototype.calcPoints = function() {
-      var row, y, _i, _len, _ref, _results;
+      let row, y, _i, _len, _ref, _results;
       _ref = this.data;
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         row = _ref[_i];
         row._x = this.transX(row.x);
         row._y = (function() {
-          var _j, _len1, _ref1, _results1;
+          let _j, _len1, _ref1, _results1;
           _ref1 = row.y;
           _results1 = [];
           for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
@@ -778,7 +778,7 @@ Licensed under the BSD-2-Clause License.
           return _results1;
         }).call(this);
         _results.push(row._ymax = Math.min.apply(Math, [this.bottom].concat((function() {
-          var _j, _len1, _ref1, _results1;
+          let _j, _len1, _ref1, _results1;
           _ref1 = row._y;
           _results1 = [];
           for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
@@ -794,7 +794,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Line.prototype.hitTest = function(x) {
-      var index, r, _i, _len, _ref;
+      let index, r, _i, _len, _ref;
       if (this.data.length === 0) {
         return null;
       }
@@ -809,13 +809,13 @@ Licensed under the BSD-2-Clause License.
     };
 
     Line.prototype.onGridClick = function(x, y) {
-      var index;
+      let index;
       index = this.hitTest(x);
       return this.fire('click', index, this.data[index].src, x, y);
     };
 
     Line.prototype.onHoverMove = function(x, y) {
-      var index;
+      let index;
       index = this.hitTest(x);
       return this.displayHoverForRow(index);
     };
@@ -827,7 +827,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Line.prototype.displayHoverForRow = function(index) {
-      var _ref;
+      let _ref;
       if (index != null) {
         (_ref = this.hover).update.apply(_ref, this.hoverContentForRow(index));
         return this.hilight(index);
@@ -838,7 +838,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Line.prototype.hoverContentForRow = function(index) {
-      var content, j, row, y, _i, _len, _ref;
+      let content, j, row, y, _i, _len, _ref;
       row = this.data[index];
       content = "<div class='morris-hover-row-label'>" + row.label + "</div>";
       _ref = row.y;
@@ -853,14 +853,14 @@ Licensed under the BSD-2-Clause License.
     };
 
     Line.prototype.generatePaths = function() {
-      var coords, i, r, smooth;
+      let coords, i, r, smooth;
       return this.paths = (function() {
-        var _i, _ref, _ref1, _results;
+        let _i, _ref, _ref1, _results;
         _results = [];
         for (i = _i = 0, _ref = this.options.ykeys.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
           smooth = typeof this.options.smooth === "boolean" ? this.options.smooth : (_ref1 = this.options.ykeys[i], __indexOf.call(this.options.smooth, _ref1) >= 0);
           coords = (function() {
-            var _j, _len, _ref2, _results1;
+            let _j, _len, _ref2, _results1;
             _ref2 = this.data;
             _results1 = [];
             for (_j = 0, _len = _ref2.length; _j < _len; _j++) {
@@ -885,7 +885,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Line.prototype.draw = function() {
-      var _ref;
+      let _ref;
       if ((_ref = this.options.axes) === true || _ref === 'both' || _ref === 'x') {
         this.drawXAxis();
       }
@@ -896,13 +896,13 @@ Licensed under the BSD-2-Clause License.
     };
 
     Line.prototype.drawXAxis = function() {
-      var drawLabel, l, labels, prevAngleMargin, prevLabelMargin, row, ypos, _i, _len, _results,
+      let drawLabel, l, labels, prevAngleMargin, prevLabelMargin, row, ypos, _i, _len, _results,
         _this = this;
       ypos = this.bottom + this.options.padding / 2;
       prevLabelMargin = null;
       prevAngleMargin = null;
       drawLabel = function(labelText, xpos) {
-        var label, labelBox, margin, offset, textBox;
+        let label, labelBox, margin, offset, textBox;
         label = _this.drawXAxisLabel(_this.transX(xpos), ypos, labelText);
         textBox = label.getBBox();
         label.transform("r" + (-_this.options.xLabelAngle));
@@ -931,7 +931,7 @@ Licensed under the BSD-2-Clause License.
         }
       } else {
         labels = (function() {
-          var _i, _len, _ref, _results;
+          let _i, _len, _ref, _results;
           _ref = this.data;
           _results = [];
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -951,7 +951,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Line.prototype.drawSeries = function() {
-      var i, _i, _j, _ref, _ref1, _results;
+      let i, _i, _j, _ref, _ref1, _results;
       this.seriesPoints = [];
       for (i = _i = _ref = this.options.ykeys.length - 1; _ref <= 0 ? _i <= 0 : _i >= 0; i = _ref <= 0 ? ++_i : --_i) {
         this._drawLineFor(i);
@@ -964,7 +964,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Line.prototype._drawPointFor = function(index) {
-      var circle, row, _i, _len, _ref, _results;
+      let circle, row, _i, _len, _ref, _results;
       this.seriesPoints[index] = [];
       _ref = this.data;
       _results = [];
@@ -980,7 +980,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Line.prototype._drawLineFor = function(index) {
-      var path;
+      let path;
       path = this.paths[index];
       if (path !== null) {
         return this.drawLinePath(path, this.colorFor(null, index, 'line'), index);
@@ -988,7 +988,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Line.createPath = function(coords, smooth, bottom) {
-      var coord, g, grads, i, ix, lg, path, prevCoord, x1, x2, y1, y2, _i, _len;
+      let coord, g, grads, i, ix, lg, path, prevCoord, x1, x2, y1, y2, _i, _len;
       path = "";
       if (smooth) {
         grads = Morris.Line.gradients(coords);
@@ -1024,7 +1024,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Line.gradients = function(coords) {
-      var coord, grad, i, nextCoord, prevCoord, _i, _len, _results;
+      let coord, grad, i, nextCoord, prevCoord, _i, _len, _results;
       grad = function(a, b) {
         return (a.y - b.y) / (a.x - b.x);
       };
@@ -1055,7 +1055,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Line.prototype.hilight = function(index) {
-      var i, _i, _j, _ref, _ref1;
+      let i, _i, _j, _ref, _ref1;
       if (this.prevHilight !== null && this.prevHilight !== index) {
         for (i = _i = 0, _ref = this.seriesPoints.length - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
           if (this.seriesPoints[i][this.prevHilight]) {
@@ -1136,7 +1136,7 @@ Licensed under the BSD-2-Clause License.
   })(Morris.Grid);
 
   Morris.labelSeries = function(dmin, dmax, pxwidth, specName, xLabelFormat) {
-    var d, d0, ddensity, name, ret, s, spec, t, _i, _len, _ref;
+    let d, d0, ddensity, name, ret, s, spec, t, _i, _len, _ref;
     ddensity = 200 * (dmax - dmin) / pxwidth;
     d0 = new Date(dmin);
     spec = Morris.LABEL_SPECS[specName];
@@ -1277,7 +1277,7 @@ Licensed under the BSD-2-Clause License.
   Morris.AUTO_LABEL_ORDER = ["decade", "year", "month", "week", "day", "hour", "30min", "15min", "10min", "5min", "minute", "30sec", "15sec", "10sec", "5sec", "second"];
 
   Morris.Area = (function(_super) {
-    var areaDefaults;
+    let areaDefaults;
 
     __extends(Area, _super);
 
@@ -1287,7 +1287,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     function Area(options) {
-      var areaOptions;
+      let areaOptions;
       if (!(this instanceof Morris.Area)) {
         return new Morris.Area(options);
       }
@@ -1300,7 +1300,7 @@ Licensed under the BSD-2-Clause License.
     }
 
     Area.prototype.calcPoints = function() {
-      var row, total, y, _i, _len, _ref, _results;
+      let row, total, y, _i, _len, _ref, _results;
       _ref = this.data;
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -1308,7 +1308,7 @@ Licensed under the BSD-2-Clause License.
         row._x = this.transX(row.x);
         total = 0;
         row._y = (function() {
-          var _j, _len1, _ref1, _results1;
+          let _j, _len1, _ref1, _results1;
           _ref1 = row.y;
           _results1 = [];
           for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
@@ -1328,18 +1328,18 @@ Licensed under the BSD-2-Clause License.
     };
 
     Area.prototype.drawSeries = function() {
-      var i, range, _i, _j, _k, _len, _ref, _ref1, _results, _results1, _results2;
+      let i, range, _i, _j, _k, _len, _ref, _ref1, _results, _results1, _results2;
       this.seriesPoints = [];
       if (this.options.behaveLikeLine) {
         range = (function() {
           _results = [];
-          for (var _i = 0, _ref = this.options.ykeys.length - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; 0 <= _ref ? _i++ : _i--){ _results.push(_i); }
+          for (let _i = 0, _ref = this.options.ykeys.length - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; 0 <= _ref ? _i++ : _i--){ _results.push(_i); }
           return _results;
         }).apply(this);
       } else {
         range = (function() {
           _results1 = [];
-          for (var _j = _ref1 = this.options.ykeys.length - 1; _ref1 <= 0 ? _j <= 0 : _j >= 0; _ref1 <= 0 ? _j++ : _j--){ _results1.push(_j); }
+          for (let _j = _ref1 = this.options.ykeys.length - 1; _ref1 <= 0 ? _j <= 0 : _j >= 0; _ref1 <= 0 ? _j++ : _j--){ _results1.push(_j); }
           return _results1;
         }).apply(this);
       }
@@ -1354,7 +1354,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Area.prototype._drawFillFor = function(index) {
-      var path;
+      let path;
       path = this.paths[index];
       if (path !== null) {
         path = path + ("L" + (this.transX(this.xmax)) + "," + this.bottom + "L" + (this.transX(this.xmin)) + "," + this.bottom + "Z");
@@ -1363,7 +1363,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Area.prototype.fillForSeries = function(i) {
-      var color;
+      let color;
       color = Raphael.rgb2hsl(this.colorFor(this.data[i], i, 'line'));
       return Raphael.hsl(color.h, this.options.behaveLikeLine ? color.s * 0.9 : color.s * 0.75, Math.min(0.98, this.options.behaveLikeLine ? color.l * 1.2 : color.l * 1.25));
     };
@@ -1413,7 +1413,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Bar.prototype.calc = function() {
-      var _ref;
+      let _ref;
       this.calcBars();
       if (this.options.hideHover === false) {
         return (_ref = this.hover).update.apply(_ref, this.hoverContentForRow(this.data.length - 1));
@@ -1421,14 +1421,14 @@ Licensed under the BSD-2-Clause License.
     };
 
     Bar.prototype.calcBars = function() {
-      var idx, row, y, _i, _len, _ref, _results;
+      let idx, row, y, _i, _len, _ref, _results;
       _ref = this.data;
       _results = [];
       for (idx = _i = 0, _len = _ref.length; _i < _len; idx = ++_i) {
         row = _ref[idx];
         row._x = this.left + this.width * (idx + 0.5) / this.data.length;
         _results.push(row._y = (function() {
-          var _j, _len1, _ref1, _results1;
+          let _j, _len1, _ref1, _results1;
           _ref1 = row.y;
           _results1 = [];
           for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
@@ -1446,7 +1446,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Bar.prototype.draw = function() {
-      var _ref;
+      let _ref;
       if ((_ref = this.options.axes) === true || _ref === 'both' || _ref === 'x') {
         this.drawXAxis();
       }
@@ -1454,7 +1454,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Bar.prototype.drawXAxis = function() {
-      var i, label, labelBox, margin, offset, prevAngleMargin, prevLabelMargin, row, textBox, ypos, _i, _ref, _results;
+      let i, label, labelBox, margin, offset, prevAngleMargin, prevLabelMargin, row, textBox, ypos, _i, _ref, _results;
       ypos = this.bottom + (this.options.xAxisLabelTopPadding || this.options.padding / 2);
       prevLabelMargin = null;
       prevAngleMargin = null;
@@ -1484,7 +1484,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Bar.prototype.drawSeries = function() {
-      var barWidth, bottom, groupWidth, idx, lastTop, left, leftPadding, numBars, row, sidx, size, spaceLeft, top, ypos, zeroPos;
+      let barWidth, bottom, groupWidth, idx, lastTop, left, leftPadding, numBars, row, sidx, size, spaceLeft, top, ypos, zeroPos;
       groupWidth = this.width / this.options.data.length;
       numBars = this.options.stacked ? 1 : this.options.ykeys.length;
       barWidth = (groupWidth * this.options.barSizeRatio - this.options.barGap * (numBars - 1)) / numBars;
@@ -1495,14 +1495,14 @@ Licensed under the BSD-2-Clause License.
       leftPadding = spaceLeft / 2;
       zeroPos = this.ymin <= 0 && this.ymax >= 0 ? this.transY(0) : null;
       return this.bars = (function() {
-        var _i, _len, _ref, _results;
+        let _i, _len, _ref, _results;
         _ref = this.data;
         _results = [];
         for (idx = _i = 0, _len = _ref.length; _i < _len; idx = ++_i) {
           row = _ref[idx];
           lastTop = 0;
           _results.push((function() {
-            var _j, _len1, _ref1, _results1;
+            let _j, _len1, _ref1, _results1;
             _ref1 = row._y;
             _results1 = [];
             for (sidx = _j = 0, _len1 = _ref1.length; _j < _len1; sidx = ++_j) {
@@ -1540,7 +1540,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Bar.prototype.colorFor = function(row, sidx, type) {
-      var r, s;
+      let r, s;
       if (typeof this.options.barColors === 'function') {
         r = {
           x: row.x,
@@ -1567,13 +1567,13 @@ Licensed under the BSD-2-Clause License.
     };
 
     Bar.prototype.onGridClick = function(x, y) {
-      var index;
+      let index;
       index = this.hitTest(x);
       return this.fire('click', index, this.data[index].src, x, y);
     };
 
     Bar.prototype.onHoverMove = function(x, y) {
-      var index, _ref;
+      let index, _ref;
       index = this.hitTest(x);
       return (_ref = this.hover).update.apply(_ref, this.hoverContentForRow(index));
     };
@@ -1585,7 +1585,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Bar.prototype.hoverContentForRow = function(index) {
-      var content, j, row, x, y, _i, _len, _ref;
+      let content, j, row, x, y, _i, _len, _ref;
       row = this.data[index];
       content = "<div class='morris-hover-row-label'>" + row.label + "</div>";
       _ref = row.y;
@@ -1601,12 +1601,12 @@ Licensed under the BSD-2-Clause License.
     };
 
     Bar.prototype.drawXAxisLabel = function(xPos, yPos, text) {
-      var label;
+      let label;
       return label = this.raphael.text(xPos, yPos, text).attr('font-size', this.options.gridTextSize).attr('font-family', this.options.gridTextFamily).attr('font-weight', this.options.gridTextWeight).attr('fill', this.options.gridTextColor);
     };
 
     Bar.prototype.drawBar = function(xPos, yPos, width, height, barColor, opacity, radiusArray) {
-      var maxRadius, path;
+      let maxRadius, path;
       maxRadius = Math.max.apply(Math, radiusArray);
       if (maxRadius === 0 || maxRadius > height) {
         path = this.raphael.rect(xPos, yPos, width, height);
@@ -1642,7 +1642,7 @@ Licensed under the BSD-2-Clause License.
       this.resizeHandler = __bind(this.resizeHandler, this);
       this.select = __bind(this.select, this);
       this.click = __bind(this.click, this);
-      var _this = this;
+      let _this = this;
       if (!(this instanceof Morris.Donut)) {
         return new Morris.Donut(options);
       }
@@ -1671,7 +1671,7 @@ Licensed under the BSD-2-Clause License.
     }
 
     Donut.prototype.redraw = function() {
-      var C, cx, cy, i, idx, last, max_value, min, next, seg, total, value, w, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _results;
+      let C, cx, cy, i, idx, last, max_value, min, next, seg, total, value, w, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _results;
       this.raphael.clear();
       cx = this.el.width() / 2;
       cy = this.el.height() / 2;
@@ -1717,10 +1717,10 @@ Licensed under the BSD-2-Clause License.
     };
 
     Donut.prototype.setData = function(data) {
-      var row;
+      let row;
       this.data = data;
       this.values = (function() {
-        var _i, _len, _ref, _results;
+        let _i, _len, _ref, _results;
         _ref = this.data;
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -1737,7 +1737,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Donut.prototype.select = function(idx) {
-      var row, s, segment, _i, _len, _ref;
+      let row, s, segment, _i, _len, _ref;
       _ref = this.segments;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         s = _ref[_i];
@@ -1750,7 +1750,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Donut.prototype.setLabels = function(label1, label2) {
-      var inner, maxHeightBottom, maxHeightTop, maxWidth, text1bbox, text1scale, text2bbox, text2scale;
+      let inner, maxHeightBottom, maxHeightTop, maxWidth, text1bbox, text1scale, text2bbox, text2scale;
       inner = (Math.min(this.el.width() / 2, this.el.height() / 2) - 10) * 2 / 3;
       maxWidth = 1.8 * inner;
       maxHeightTop = inner / 2;
@@ -1776,7 +1776,7 @@ Licensed under the BSD-2-Clause License.
     };
 
     Donut.prototype.drawEmptyDonutLabel = function(xPos, yPos, color, fontSize, fontWeight) {
-      var text;
+      let text;
       text = this.raphael.text(xPos, yPos, '').attr('font-size', fontSize).attr('fill', color);
       if (fontWeight != null) {
         text.attr('font-weight', fontWeight);
@@ -1823,20 +1823,20 @@ Licensed under the BSD-2-Clause License.
     };
 
     DonutSegment.prototype.calcSegment = function(r1, r2) {
-      var ix0, ix1, iy0, iy1, ox0, ox1, oy0, oy1, _ref, _ref1;
+      let ix0, ix1, iy0, iy1, ox0, ox1, oy0, oy1, _ref, _ref1;
       _ref = this.calcArcPoints(r1), ix0 = _ref[0], iy0 = _ref[1], ix1 = _ref[2], iy1 = _ref[3];
       _ref1 = this.calcArcPoints(r2), ox0 = _ref1[0], oy0 = _ref1[1], ox1 = _ref1[2], oy1 = _ref1[3];
       return ("M" + ix0 + "," + iy0) + ("A" + r1 + "," + r1 + ",0," + this.is_long + ",0," + ix1 + "," + iy1) + ("L" + ox1 + "," + oy1) + ("A" + r2 + "," + r2 + ",0," + this.is_long + ",1," + ox0 + "," + oy0) + "Z";
     };
 
     DonutSegment.prototype.calcArc = function(r) {
-      var ix0, ix1, iy0, iy1, _ref;
+      let ix0, ix1, iy0, iy1, _ref;
       _ref = this.calcArcPoints(r), ix0 = _ref[0], iy0 = _ref[1], ix1 = _ref[2], iy1 = _ref[3];
       return ("M" + ix0 + "," + iy0) + ("A" + r + "," + r + ",0," + this.is_long + ",0," + ix1 + "," + iy1);
     };
 
     DonutSegment.prototype.render = function() {
-      var _this = this;
+      let _this = this;
       this.arc = this.drawDonutArc(this.hilight, this.color);
       return this.seg = this.drawDonutSegment(this.path, this.color, this.backgroundColor, function() {
         return _this.fire('hover', _this.index);

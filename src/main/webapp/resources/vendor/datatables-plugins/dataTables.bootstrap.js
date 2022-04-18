@@ -12,7 +12,7 @@
  */
 (function(window, document, undefined){
 
-var factory = function( $, DataTable ) {
+let factory = function( $, DataTable ) {
 "use strict";
 
 
@@ -36,14 +36,14 @@ $.extend( DataTable.ext.classes, {
 
 /* Bootstrap paging button renderer */
 DataTable.ext.renderer.pageButton.bootstrap = function ( settings, host, idx, buttons, page, pages ) {
-	var api     = new DataTable.Api( settings );
-	var classes = settings.oClasses;
-	var lang    = settings.oLanguage.oPaginate;
-	var btnDisplay, btnClass;
+	let api     = new DataTable.Api( settings );
+	let classes = settings.oClasses;
+	let lang    = settings.oLanguage.oPaginate;
+	let btnDisplay, btnClass;
 
-	var attach = function( container, buttons ) {
-		var i, ien, node, button;
-		var clickHandler = function ( e ) {
+	let attach = function( container, buttons ) {
+		let i, ien, node, button;
+		let clickHandler = function ( e ) {
 			e.preventDefault();
 			if ( !$(e.currentTarget).hasClass('disabled') ) {
 				api.page( e.data.action ).draw( false );

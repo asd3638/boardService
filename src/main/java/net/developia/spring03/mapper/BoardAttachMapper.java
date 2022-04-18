@@ -13,7 +13,4 @@ public interface BoardAttachMapper {
 	List<BoardAttachDTO> findByBno(Long bno);
 
 	void deleteAll(Long bno);
-
-	List<BoardAttachDTO> getOldFiles();
-
 }

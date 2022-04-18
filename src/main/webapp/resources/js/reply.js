@@ -1,6 +1,6 @@
 console.log("Reply Module........");
 
-var replyService = (function() {
+let replyService = (function() {
 
 	function add(reply, callback, error) {
 		console.log("add reply...............");
@@ -25,8 +25,8 @@ var replyService = (function() {
 
 //	function getList(param, callback, error) {
 //
-//		var bno = param.bno;
-//		var page = param.page || 1;
+//		let bno = param.bno;
+//		let page = param.page || 1;
 //
 //		$.getJSON("/replies/pages/" + bno + "/" + page + ".json",
 //				function(data) {
@@ -44,8 +44,8 @@ var replyService = (function() {
 
 	function getList(param, callback, error) {
 
-	    var bno = param.bno;
-	    var page = param.page || 1;
+	    let bno = param.bno;
+	    let page = param.page || 1;
 		console.log("get reply")
 	    
 	    $.getJSON("/replies/pages/" + bno + "/" + page + ".json",
@@ -119,26 +119,26 @@ var replyService = (function() {
 
 	function displayTime(timeValue) {
 
-		var today = new Date();
+		let today = new Date();
 
-		var gap = today.getTime() - timeValue;
+		let gap = today.getTime() - timeValue;
 
-		var dateObj = new Date(timeValue);
-		var str = "";
+		let dateObj = new Date(timeValue);
+		let str = "";
 
 		if (gap < (1000 * 60 * 60 * 24)) {
 
-			var hh = dateObj.getHours();
-			var mi = dateObj.getMinutes();
-			var ss = dateObj.getSeconds();
+			let hh = dateObj.getHours();
+			let mi = dateObj.getMinutes();
+			let ss = dateObj.getSeconds();
 
 			return [ (hh > 9 ? '' : '0') + hh, ':', (mi > 9 ? '' : '0') + mi,
 					':', (ss > 9 ? '' : '0') + ss ].join('');
 
 		} else {
-			var yy = dateObj.getFullYear();
-			var mm = dateObj.getMonth() + 1; // getMonth() is zero-based
-			var dd = dateObj.getDate();
+			let yy = dateObj.getFullYear();
+			let mm = dateObj.getMonth() + 1; // getMonth() is zero-based
+			let dd = dateObj.getDate();
 
 			return [ yy, '/', (mm > 9 ? '' : '0') + mm, '/',
 					(dd > 9 ? '' : '0') + dd ].join('');

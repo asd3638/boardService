@@ -1,6 +1,6 @@
 (function ($) {
     // plugin options, default values
-    var defaultOptions = {
+    let defaultOptions = {
         tooltip: {
             show: false,
             cssClass: "flotTip",
@@ -39,7 +39,7 @@
     defaultOptions.tooltipOpts = defaultOptions.tooltip;
 
     // object
-    var FlotTooltip = function (plot) {
+    let FlotTooltip = function (plot) {
         // variables
         this.tipPosition = {x: 0, y: 0};
 
@@ -48,14 +48,14 @@
 
     // main plugin function
     FlotTooltip.prototype.init = function (plot) {
-        var that = this;
+        let that = this;
 
         // detect other flot plugins
-        var plotPluginsLength = $.plot.plugins.length;
+        let plotPluginsLength = $.plot.plugins.length;
         this.plotPlugins = [];
 
         if (plotPluginsLength) {
-            for (var p = 0; p < plotPluginsLength; p++) {
+            for (let p = 0; p < plotPluginsLength; p++) {
                 this.plotPlugins.push($.plot.plugins[p].name);
             }
         }
@@ -87,7 +87,7 @@
             }
 
             // create tooltip DOM element
-            var $tip = that.getDomElement();
+            let $tip = that.getDomElement();
 
             // bind event
             $( plot.getPlaceholder() ).bind("plothover", plothover);
@@ -107,7 +107,7 @@
         });
 
         function mouseMove(e){
-            var pos = {};
+            let pos = {};
             pos.x = e.pageX;
             pos.y = e.pageY;
             plot.setTooltipPosition(pos);
@@ -134,18 +134,18 @@
 
         function plothover(event, pos, item) {
             // Simple distance formula.
-            var lineDistance = function (p1x, p1y, p2x, p2y) {
+            let lineDistance = function (p1x, p1y, p2x, p2y) {
                 return Math.sqrt((p2x - p1x) * (p2x - p1x) + (p2y - p1y) * (p2y - p1y));
             };
 
             // Here is some voodoo magic for determining the distance to a line form a given point {x, y}.
-            var dotLineLength = function (x, y, x0, y0, x1, y1, o) {
+            let dotLineLength = function (x, y, x0, y0, x1, y1, o) {
                 if (o && !(o =
                     function (x, y, x0, y0, x1, y1) {
                         if (typeof x0 !== 'undefined') return { x: x0, y: y };
                         else if (typeof y0 !== 'undefined') return { x: x, y: y0 };
 
-                        var left,
+                        let left,
                             tg = -1 / ((y1 - y0) / (x1 - x0));
 
                         return {
@@ -155,10 +155,10 @@
                     } (x, y, x0, y0, x1, y1),
                     o.x >= Math.min(x0, x1) && o.x <= Math.max(x0, x1) && o.y >= Math.min(y0, y1) && o.y <= Math.max(y0, y1))
                 ) {
-                    var l1 = lineDistance(x, y, x0, y0), l2 = lineDistance(x, y, x1, y1);
+                    let l1 = lineDistance(x, y, x0, y0), l2 = lineDistance(x, y, x1, y1);
                     return l1 > l2 ? l2 : l1;
                 } else {
-                    var a = y0 - y1, b = x1 - x0, c = x0 * y1 - y0 * x1;
+                    let a = y0 - y1, b = x1 - x0, c = x0 * y1 - y0 * x1;
                     return Math.abs(a * x + b * y + c) / Math.sqrt(a * a + b * b);
                 }
             };
@@ -166,21 +166,21 @@
             if (item) {
                 plot.showTooltip(item, that.tooltipOptions.snap ? item : pos);
             } else if (that.plotOptions.series.lines.show && that.tooltipOptions.lines === true) {
-                var maxDistance = that.plotOptions.grid.mouseActiveRadius;
+                let maxDistance = that.plotOptions.grid.mouseActiveRadius;
 
-                var closestTrace = {
+                let closestTrace = {
                     distance: maxDistance + 1
                 };
 
-                var ttPos = pos;
+                let ttPos = pos;
 
                 $.each(plot.getData(), function (i, series) {
-                    var xBeforeIndex = 0,
+                    let xBeforeIndex = 0,
                         xAfterIndex = -1;
 
                     // Our search here assumes our data is sorted via the x-axis.
                     // TODO: Improve efficiency somehow - search smaller sets of data.
-                    for (var j = 1; j < series.data.length; j++) {
+                    for (let j = 1; j < series.data.length; j++) {
                         if (series.data[j - 1][0] <= pos.x && series.data[j][0] >= pos.x) {
                             xBeforeIndex = j - 1;
                             xAfterIndex = j;
@@ -192,26 +192,26 @@
                         return;
                     }
 
-                    var pointPrev = { x: series.data[xBeforeIndex][0], y: series.data[xBeforeIndex][1] },
+                    let pointPrev = { x: series.data[xBeforeIndex][0], y: series.data[xBeforeIndex][1] },
                         pointNext = { x: series.data[xAfterIndex][0], y: series.data[xAfterIndex][1] };
 
-                    var distToLine = dotLineLength(series.xaxis.p2c(pos.x), series.yaxis.p2c(pos.y), series.xaxis.p2c(pointPrev.x),
+                    let distToLine = dotLineLength(series.xaxis.p2c(pos.x), series.yaxis.p2c(pos.y), series.xaxis.p2c(pointPrev.x),
                         series.yaxis.p2c(pointPrev.y), series.xaxis.p2c(pointNext.x), series.yaxis.p2c(pointNext.y), false);
 
                     if (distToLine < closestTrace.distance) {
 
-                        var closestIndex = lineDistance(pointPrev.x, pointPrev.y, pos.x, pos.y) <
+                        let closestIndex = lineDistance(pointPrev.x, pointPrev.y, pos.x, pos.y) <
                             lineDistance(pos.x, pos.y, pointNext.x, pointNext.y) ? xBeforeIndex : xAfterIndex;
 
-                        var pointSize = series.datapoints.pointsize;
+                        let pointSize = series.datapoints.pointsize;
 
                         // Calculate the point on the line vertically closest to our cursor.
-                        var pointOnLine = [
+                        let pointOnLine = [
                             pos.x,
                             pointPrev.y + ((pointNext.y - pointPrev.y) * ((pos.x - pointPrev.x) / (pointNext.x - pointPrev.x)))
                         ];
 
-                        var item = {
+                        let item = {
                             datapoint: pointOnLine,
                             dataIndex: closestIndex,
                             series: series,
@@ -243,10 +243,10 @@
 
         // Quick little function for setting the tooltip position.
         plot.setTooltipPosition = function (pos) {
-            var $tip = that.getDomElement();
+            let $tip = that.getDomElement();
 
-            var totalTipWidth = $tip.outerWidth() + that.tooltipOptions.shifts.x;
-            var totalTipHeight = $tip.outerHeight() + that.tooltipOptions.shifts.y;
+            let totalTipWidth = $tip.outerWidth() + that.tooltipOptions.shifts.x;
+            let totalTipHeight = $tip.outerHeight() + that.tooltipOptions.shifts.y;
             if ((pos.x - $(window).scrollLeft()) > ($(window)[that.wfunc]() - totalTipWidth)) {
                 pos.x -= totalTipWidth;
             }
@@ -280,10 +280,10 @@
 
         // Quick little function for showing the tooltip.
         plot.showTooltip = function (target, position, targetPosition) {
-            var $tip = that.getDomElement();
+            let $tip = that.getDomElement();
 
             // convert tooltip content template to real tipText
-            var tipText = that.stringFormat(that.tooltipOptions.content, target);
+            let tipText = that.stringFormat(that.tooltipOptions.content, target);
             if (tipText === '')
                 return;
 
@@ -315,7 +315,7 @@
      * @return jQuery object
      */
     FlotTooltip.prototype.getDomElement = function () {
-        var $tip = $('<div>');
+        let $tip = $('<div>');
         if (this.tooltipOptions && this.tooltipOptions.cssClass) {
             $tip = $('.' + this.tooltipOptions.cssClass);
 
@@ -348,19 +348,19 @@
      * @return {string} real tooltip content for current item
      */
     FlotTooltip.prototype.stringFormat = function (content, item) {
-        var percentPattern = /%p\.{0,1}(\d{0,})/;
-        var seriesPattern = /%s/;
-        var colorPattern = /%c/;
-        var xLabelPattern = /%lx/; // requires flot-axislabels plugin https://github.com/markrcote/flot-axislabels, will be ignored if plugin isn't loaded
-        var yLabelPattern = /%ly/; // requires flot-axislabels plugin https://github.com/markrcote/flot-axislabels, will be ignored if plugin isn't loaded
-        var xPattern = /%x\.{0,1}(\d{0,})/;
-        var yPattern = /%y\.{0,1}(\d{0,})/;
-        var xPatternWithoutPrecision = "%x";
-        var yPatternWithoutPrecision = "%y";
-        var customTextPattern = "%ct";
-	var nPiePattern = "%n";
+        let percentPattern = /%p\.{0,1}(\d{0,})/;
+        let seriesPattern = /%s/;
+        let colorPattern = /%c/;
+        let xLabelPattern = /%lx/; // requires flot-axislabels plugin https://github.com/markrcote/flot-axislabels, will be ignored if plugin isn't loaded
+        let yLabelPattern = /%ly/; // requires flot-axislabels plugin https://github.com/markrcote/flot-axislabels, will be ignored if plugin isn't loaded
+        let xPattern = /%x\.{0,1}(\d{0,})/;
+        let yPattern = /%y\.{0,1}(\d{0,})/;
+        let xPatternWithoutPrecision = "%x";
+        let yPatternWithoutPrecision = "%y";
+        let customTextPattern = "%ct";
+	let nPiePattern = "%n";
 	
-        var x, y, customText, p, n;
+        let x, y, customText, p, n;
 
         // for threshold plugin we need to read data from different place
         if (typeof item.series.threshold !== "undefined") {
@@ -479,7 +479,7 @@
         // change x from number to given label, if given
         if (typeof item.series.xaxis.ticks !== 'undefined') {
 
-            var ticks;
+            let ticks;
             if (this.hasRotatedXAxisTicks(item)) {
                 // xaxis.ticks will be an empty array if tickRotor is being used, but the values are available in rotatedTicks
                 ticks = 'rotatedTicks';
@@ -488,11 +488,11 @@
             }
 
             // see https://github.com/krzysu/flot.tooltip/issues/65
-            var tickIndex = item.dataIndex + item.seriesIndex;
+            let tickIndex = item.dataIndex + item.seriesIndex;
 
-            for (var xIndex in item.series.xaxis[ticks]) {
+            for (let xIndex in item.series.xaxis[ticks]) {
                 if (item.series.xaxis[ticks].hasOwnProperty(tickIndex) && !this.isTimeMode('xaxis', item)) {
-                    var valueX = (this.isCategoriesMode('xaxis', item)) ? item.series.xaxis[ticks][tickIndex].label : item.series.xaxis[ticks][tickIndex].v;
+                    let valueX = (this.isCategoriesMode('xaxis', item)) ? item.series.xaxis[ticks][tickIndex].label : item.series.xaxis[ticks][tickIndex].v;
                     if (valueX === x) {
                         content = content.replace(xPattern, item.series.xaxis[ticks][tickIndex].label.replace(/\$/g, '$$$$'));
                     }
@@ -502,9 +502,9 @@
 
         // change y from number to given label, if given
         if (typeof item.series.yaxis.ticks !== 'undefined') {
-            for (var yIndex in item.series.yaxis.ticks) {
+            for (let yIndex in item.series.yaxis.ticks) {
                 if (item.series.yaxis.ticks.hasOwnProperty(yIndex)) {
-                    var valueY = (this.isCategoriesMode('yaxis', item)) ? item.series.yaxis.ticks[yIndex].label : item.series.yaxis.ticks[yIndex].v;
+                    let valueY = (this.isCategoriesMode('yaxis', item)) ? item.series.yaxis.ticks[yIndex].label : item.series.yaxis.ticks[yIndex].v;
                     if (valueY === y) {
                         content = content.replace(yPattern, item.series.yaxis.ticks[yIndex].label.replace(/\$/g, '$$$$'));
                     }
@@ -544,15 +544,15 @@
 
     //
     FlotTooltip.prototype.timestampToDate = function (tmst, dateFormat, options) {
-        var theDate = $.plot.dateGenerator(tmst, options);
+        let theDate = $.plot.dateGenerator(tmst, options);
         return $.plot.formatDate(theDate, dateFormat, this.tooltipOptions.monthNames, this.tooltipOptions.dayNames);
     };
 
     //
     FlotTooltip.prototype.adjustValPrecision = function (pattern, content, value) {
 
-        var precision;
-        var matchResult = content.match(pattern);
+        let precision;
+        let matchResult = content.match(pattern);
         if( matchResult !== null ) {
             if(RegExp.$1 !== '') {
                 precision = RegExp.$1;
@@ -578,7 +578,7 @@
     };
 
     //
-    var init = function (plot) {
+    let init = function (plot) {
       new FlotTooltip(plot);
     };
 

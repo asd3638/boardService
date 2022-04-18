@@ -39,7 +39,7 @@ The plugin also adds four public methods:
 
     Example usage:
 
-	var myFlot = $.plot( $("#graph"), ..., { crosshair: { mode: "x" } } };
+	let myFlot = $.plot( $("#graph"), ..., { crosshair: { mode: "x" } } };
 	$("#graph").bind( "plothover", function ( evt, position, item ) {
 		if ( item ) {
 			// Lock the crosshair to the data point being hovered
@@ -59,7 +59,7 @@ The plugin also adds four public methods:
 */
 
 (function ($) {
-    var options = {
+    let options = {
         crosshair: {
             mode: null, // one of null, "x", "y" or "xy",
             color: "rgba(170, 0, 0, 0.80)",
@@ -69,13 +69,13 @@ The plugin also adds four public methods:
     
     function init(plot) {
         // position of crosshair in pixels
-        var crosshair = { x: -1, y: -1, locked: false };
+        let crosshair = { x: -1, y: -1, locked: false };
 
         plot.setCrosshair = function setCrosshair(pos) {
             if (!pos)
                 crosshair.x = -1;
             else {
-                var o = plot.p2c(pos);
+                let o = plot.p2c(pos);
                 crosshair.x = Math.max(0, Math.min(o.left, plot.width()));
                 crosshair.y = Math.max(0, Math.min(o.top, plot.height()));
             }
@@ -114,7 +114,7 @@ The plugin also adds four public methods:
                 return;
             }
                 
-            var offset = plot.offset();
+            let offset = plot.offset();
             crosshair.x = Math.max(0, Math.min(e.pageX - offset.left, plot.width()));
             crosshair.y = Math.max(0, Math.min(e.pageY - offset.top, plot.height()));
             plot.triggerRedrawOverlay();
@@ -129,17 +129,17 @@ The plugin also adds four public methods:
         });
 
         plot.hooks.drawOverlay.push(function (plot, ctx) {
-            var c = plot.getOptions().crosshair;
+            let c = plot.getOptions().crosshair;
             if (!c.mode)
                 return;
 
-            var plotOffset = plot.getPlotOffset();
+            let plotOffset = plot.getPlotOffset();
             
             ctx.save();
             ctx.translate(plotOffset.left, plotOffset.top);
 
             if (crosshair.x != -1) {
-                var adj = plot.getOptions().crosshair.lineWidth % 2 ? 0.5 : 0;
+                let adj = plot.getOptions().crosshair.lineWidth % 2 ? 0.5 : 0;
 
                 ctx.strokeStyle = c.color;
                 ctx.lineWidth = c.lineWidth;
@@ -147,12 +147,12 @@ The plugin also adds four public methods:
 
                 ctx.beginPath();
                 if (c.mode.indexOf("x") != -1) {
-                    var drawX = Math.floor(crosshair.x) + adj;
+                    let drawX = Math.floor(crosshair.x) + adj;
                     ctx.moveTo(drawX, 0);
                     ctx.lineTo(drawX, plot.height());
                 }
                 if (c.mode.indexOf("y") != -1) {
-                    var drawY = Math.floor(crosshair.y) + adj;
+                    let drawY = Math.floor(crosshair.y) + adj;
                     ctx.moveTo(0, drawY);
                     ctx.lineTo(plot.width(), drawY);
                 }

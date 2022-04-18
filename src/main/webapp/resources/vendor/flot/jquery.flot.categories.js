@@ -44,7 +44,7 @@ as "categories" on the axis object, e.g. plot.getAxes().xaxis.categories.
 */
 
 (function ($) {
-    var options = {
+    let options = {
         xaxis: {
             categories: null
         },
@@ -58,23 +58,23 @@ as "categories" on the axis object, e.g. plot.getAxes().xaxis.categories.
         // auto-transformation to numbers so the strings are intact
         // for later processing
 
-        var xCategories = series.xaxis.options.mode == "categories",
+        let xCategories = series.xaxis.options.mode == "categories",
             yCategories = series.yaxis.options.mode == "categories";
         
         if (!(xCategories || yCategories))
             return;
 
-        var format = datapoints.format;
+        let format = datapoints.format;
 
         if (!format) {
             // FIXME: auto-detection should really not be defined here
-            var s = series;
+            let s = series;
             format = [];
             format.push({ x: true, number: true, required: true });
             format.push({ y: true, number: true, required: true });
 
             if (s.bars.show || (s.lines.show && s.lines.fill)) {
-                var autoscale = !!((s.bars.show && s.bars.zero) || (s.lines.show && s.lines.zero));
+                let autoscale = !!((s.bars.show && s.bars.zero) || (s.lines.show && s.lines.zero));
                 format.push({ y: true, number: true, required: false, defaultValue: 0, autoscale: autoscale });
                 if (s.bars.horizontal) {
                     delete format[format.length - 1].y;
@@ -85,7 +85,7 @@ as "categories" on the axis object, e.g. plot.getAxes().xaxis.categories.
             datapoints.format = format;
         }
 
-        for (var m = 0; m < format.length; ++m) {
+        for (let m = 0; m < format.length; ++m) {
             if (format[m].x && xCategories)
                 format[m].number = false;
             
@@ -95,9 +95,9 @@ as "categories" on the axis object, e.g. plot.getAxes().xaxis.categories.
     }
 
     function getNextIndex(categories) {
-        var index = -1;
+        let index = -1;
         
-        for (var v in categories)
+        for (let v in categories)
             if (categories[v] > index)
                 index = categories[v];
 
@@ -105,9 +105,9 @@ as "categories" on the axis object, e.g. plot.getAxes().xaxis.categories.
     }
 
     function categoriesTickGenerator(axis) {
-        var res = [];
-        for (var label in axis.categories) {
-            var v = axis.categories[label];
+        let res = [];
+        for (let label in axis.categories) {
+            let v = axis.categories[label];
             if (v >= axis.min && v <= axis.max)
                 res.push([v, label]);
         }
@@ -123,13 +123,13 @@ as "categories" on the axis object, e.g. plot.getAxes().xaxis.categories.
         
         if (!series[axis].categories) {
             // parse options
-            var c = {}, o = series[axis].options.categories || {};
+            let c = {}, o = series[axis].options.categories || {};
             if ($.isArray(o)) {
-                for (var i = 0; i < o.length; ++i)
+                for (let i = 0; i < o.length; ++i)
                     c[o[i]] = i;
             }
             else {
-                for (var v in o)
+                for (let v in o)
                     c[v] = o[v];
             }
             
@@ -145,18 +145,18 @@ as "categories" on the axis object, e.g. plot.getAxes().xaxis.categories.
     
     function transformPointsOnAxis(datapoints, axis, categories) {
         // go through the points, transforming them
-        var points = datapoints.points,
+        let points = datapoints.points,
             ps = datapoints.pointsize,
             format = datapoints.format,
             formatColumn = axis.charAt(0),
             index = getNextIndex(categories);
 
-        for (var i = 0; i < points.length; i += ps) {
+        for (let i = 0; i < points.length; i += ps) {
             if (points[i] == null)
                 continue;
             
-            for (var m = 0; m < ps; ++m) {
-                var val = points[i + m];
+            for (let m = 0; m < ps; ++m) {
+                let val = points[i + m];
 
                 if (val == null || !format[m][formatColumn])
                     continue;

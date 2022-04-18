@@ -38,18 +38,18 @@ if (!document.createElement('canvas').getContext) {
 (function() {
 
   // alias some functions to make (compiled) code shorter
-  var m = Math;
-  var mr = m.round;
-  var ms = m.sin;
-  var mc = m.cos;
-  var abs = m.abs;
-  var sqrt = m.sqrt;
+  let m = Math;
+  let mr = m.round;
+  let ms = m.sin;
+  let mc = m.cos;
+  let abs = m.abs;
+  let sqrt = m.sqrt;
 
   // this is used for sub pixel precision
-  var Z = 10;
-  var Z2 = Z / 2;
+  let Z = 10;
+  let Z2 = Z / 2;
 
-  var IE_VERSION = +navigator.userAgent.match(/MSIE ([\d.]+)?/)[1];
+  let IE_VERSION = +navigator.userAgent.match(/MSIE ([\d.]+)?/)[1];
 
   /**
    * This funtion is assigned to the <canvas> elements as element.getContext().
@@ -61,7 +61,7 @@ if (!document.createElement('canvas').getContext) {
         (this.context_ = new CanvasRenderingContext2D_(this));
   }
 
-  var slice = Array.prototype.slice;
+  let slice = Array.prototype.slice;
 
   /**
    * Binds a function to an object. The returned function will always use the
@@ -80,7 +80,7 @@ if (!document.createElement('canvas').getContext) {
    * @return {Function} A new function that has bound this
    */
   function bind(f, obj, var_args) {
-    var a = slice.call(arguments, 2);
+    let a = slice.call(arguments, 2);
     return function() {
       return f.apply(obj, a.concat(slice.call(arguments)));
     };
@@ -102,7 +102,7 @@ if (!document.createElement('canvas').getContext) {
 
     // Setup default CSS.  Only add one style sheet per document
     if (!doc.styleSheets['ex_canvas_']) {
-      var ss = doc.createStyleSheet();
+      let ss = doc.createStyleSheet();
       ss.owningElement.id = 'ex_canvas_';
       ss.cssText = 'canvas{display:inline-block;overflow:hidden;' +
           // default size is 300x150 in Gecko and Opera
@@ -113,9 +113,9 @@ if (!document.createElement('canvas').getContext) {
   // Add namespaces and stylesheet at startup.
   addNamespacesAndStylesheet(document);
 
-  var G_vmlCanvasManager_ = {
+  let G_vmlCanvasManager_ = {
     init: function(opt_doc) {
-      var doc = opt_doc || document;
+      let doc = opt_doc || document;
       // Create a dummy element so that IE will allow canvas elements to be
       // recognized.
       doc.createElement('canvas');
@@ -124,8 +124,8 @@ if (!document.createElement('canvas').getContext) {
 
     init_: function(doc) {
       // find all canvas elements
-      var els = doc.getElementsByTagName('canvas');
-      for (var i = 0; i < els.length; i++) {
+      let els = doc.getElementsByTagName('canvas');
+      for (let i = 0; i < els.length; i++) {
         this.initElement(els[i]);
       }
     },
@@ -154,7 +154,7 @@ if (!document.createElement('canvas').getContext) {
         el.attachEvent('onpropertychange', onPropertyChange);
         el.attachEvent('onresize', onResize);
 
-        var attrs = el.attributes;
+        let attrs = el.attributes;
         if (attrs.width && attrs.width.specified) {
           // TODO: use runtimeStyle and coordsize
           // el.getContext().setWidth_(attrs.width.nodeValue);
@@ -176,7 +176,7 @@ if (!document.createElement('canvas').getContext) {
   };
 
   function onPropertyChange(e) {
-    var el = e.srcElement;
+    let el = e.srcElement;
 
     switch (e.propertyName) {
       case 'width':
@@ -194,7 +194,7 @@ if (!document.createElement('canvas').getContext) {
   }
 
   function onResize(e) {
-    var el = e.srcElement;
+    let el = e.srcElement;
     if (el.firstChild) {
       el.firstChild.style.width =  el.clientWidth + 'px';
       el.firstChild.style.height = el.clientHeight + 'px';
@@ -204,9 +204,9 @@ if (!document.createElement('canvas').getContext) {
   G_vmlCanvasManager_.init();
 
   // precompute "00" to "FF"
-  var decToHex = [];
-  for (var i = 0; i < 16; i++) {
-    for (var j = 0; j < 16; j++) {
+  let decToHex = [];
+  for (let i = 0; i < 16; i++) {
+    for (let j = 0; j < 16; j++) {
       decToHex[i * 16 + j] = i.toString(16) + j.toString(16);
     }
   }
@@ -220,13 +220,13 @@ if (!document.createElement('canvas').getContext) {
   }
 
   function matrixMultiply(m1, m2) {
-    var result = createMatrixIdentity();
+    let result = createMatrixIdentity();
 
-    for (var x = 0; x < 3; x++) {
-      for (var y = 0; y < 3; y++) {
-        var sum = 0;
+    for (let x = 0; x < 3; x++) {
+      for (let y = 0; y < 3; y++) {
+        let sum = 0;
 
-        for (var z = 0; z < 3; z++) {
+        for (let z = 0; z < 3; z++) {
           sum += m1[x][z] * m2[z][y];
         }
 
@@ -256,7 +256,7 @@ if (!document.createElement('canvas').getContext) {
     o2.lineScale_    = o1.lineScale_;
   }
 
-  var colorData = {
+  let colorData = {
     aliceblue: '#F0F8FF',
     antiquewhite: '#FAEBD7',
     aquamarine: '#7FFFD4',
@@ -392,9 +392,9 @@ if (!document.createElement('canvas').getContext) {
 
 
   function getRgbHslContent(styleString) {
-    var start = styleString.indexOf('(', 3);
-    var end = styleString.indexOf(')', start + 1);
-    var parts = styleString.substring(start + 1, end).split(',');
+    let start = styleString.indexOf('(', 3);
+    let end = styleString.indexOf(')', start + 1);
+    let parts = styleString.substring(start + 1, end).split(',');
     // add alpha if needed
     if (parts.length != 4 || styleString.charAt(3) != 'a') {
       parts[3] = 1;
@@ -411,7 +411,7 @@ if (!document.createElement('canvas').getContext) {
   }
 
   function hslToRgb(parts){
-    var r, g, b, h, s, l;
+    let r, g, b, h, s, l;
     h = parseFloat(parts[0]) / 360 % 360;
     if (h < 0)
       h++;
@@ -420,8 +420,8 @@ if (!document.createElement('canvas').getContext) {
     if (s == 0) {
       r = g = b = l; // achromatic
     } else {
-      var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-      var p = 2 * l - q;
+      let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+      let p = 2 * l - q;
       r = hueToRgb(p, q, h + 1 / 3);
       g = hueToRgb(p, q, h);
       b = hueToRgb(p, q, h - 1 / 3);
@@ -448,22 +448,22 @@ if (!document.createElement('canvas').getContext) {
       return m1;
   }
 
-  var processStyleCache = {};
+  let processStyleCache = {};
 
   function processStyle(styleString) {
     if (styleString in processStyleCache) {
       return processStyleCache[styleString];
     }
 
-    var str, alpha = 1;
+    let str, alpha = 1;
 
     styleString = String(styleString);
     if (styleString.charAt(0) == '#') {
       str = styleString;
     } else if (/^rgb/.test(styleString)) {
-      var parts = getRgbHslContent(styleString);
-      var str = '#', n;
-      for (var i = 0; i < 3; i++) {
+      let parts = getRgbHslContent(styleString);
+      let str = '#', n;
+      for (let i = 0; i < 3; i++) {
         if (parts[i].indexOf('%') != -1) {
           n = Math.floor(percent(parts[i]) * 255);
         } else {
@@ -473,7 +473,7 @@ if (!document.createElement('canvas').getContext) {
       }
       alpha = +parts[3];
     } else if (/^hsl/.test(styleString)) {
-      var parts = getRgbHslContent(styleString);
+      let parts = getRgbHslContent(styleString);
       str = hslToRgb(parts);
       alpha = parts[3];
     } else {
@@ -482,7 +482,7 @@ if (!document.createElement('canvas').getContext) {
     return processStyleCache[styleString] = {color: str, alpha: alpha};
   }
 
-  var DEFAULT_STYLE = {
+  let DEFAULT_STYLE = {
     style: 'normal',
     variant: 'normal',
     weight: 'normal',
@@ -491,15 +491,15 @@ if (!document.createElement('canvas').getContext) {
   };
 
   // Internal text style cache
-  var fontStyleCache = {};
+  let fontStyleCache = {};
 
   function processFontStyle(styleString) {
     if (fontStyleCache[styleString]) {
       return fontStyleCache[styleString];
     }
 
-    var el = document.createElement('div');
-    var style = el.style;
+    let el = document.createElement('div');
+    let style = el.style;
     try {
       style.font = styleString;
     } catch (ex) {
@@ -516,14 +516,14 @@ if (!document.createElement('canvas').getContext) {
   }
 
   function getComputedStyle(style, element) {
-    var computedStyle = {};
+    let computedStyle = {};
 
-    for (var p in style) {
+    for (let p in style) {
       computedStyle[p] = style[p];
     }
 
     // Compute the size
-    var canvasFontSize = parseFloat(element.currentStyle.fontSize),
+    let canvasFontSize = parseFloat(element.currentStyle.fontSize),
         fontSize = parseFloat(style.size);
 
     if (typeof style.size == 'number') {
@@ -552,7 +552,7 @@ if (!document.createElement('canvas').getContext) {
         style.size + 'px ' + style.family;
   }
 
-  var lineCapMap = {
+  let lineCapMap = {
     'butt': 'flat',
     'round': 'round'
   };
@@ -588,13 +588,13 @@ if (!document.createElement('canvas').getContext) {
     this.textBaseline = 'alphabetic';
     this.canvas = canvasElement;
 
-    var cssText = 'width:' + canvasElement.clientWidth + 'px;height:' +
+    let cssText = 'width:' + canvasElement.clientWidth + 'px;height:' +
         canvasElement.clientHeight + 'px;overflow:hidden;position:absolute';
-    var el = canvasElement.ownerDocument.createElement('div');
+    let el = canvasElement.ownerDocument.createElement('div');
     el.style.cssText = cssText;
     canvasElement.appendChild(el);
 
-    var overlayEl = el.cloneNode(false);
+    let overlayEl = el.cloneNode(false);
     // Use a non transparent background.
     overlayEl.style.backgroundColor = 'red';
     overlayEl.style.filter = 'alpha(opacity=0)';
@@ -606,7 +606,7 @@ if (!document.createElement('canvas').getContext) {
     this.lineScale_ = 1;
   }
 
-  var contextPrototype = CanvasRenderingContext2D_.prototype;
+  let contextPrototype = CanvasRenderingContext2D_.prototype;
   contextPrototype.clearRect = function() {
     if (this.textMeasureEl_) {
       this.textMeasureEl_.removeNode(true);
@@ -622,14 +622,14 @@ if (!document.createElement('canvas').getContext) {
   };
 
   contextPrototype.moveTo = function(aX, aY) {
-    var p = getCoords(this, aX, aY);
+    let p = getCoords(this, aX, aY);
     this.currentPath_.push({type: 'moveTo', x: p.x, y: p.y});
     this.currentX_ = p.x;
     this.currentY_ = p.y;
   };
 
   contextPrototype.lineTo = function(aX, aY) {
-    var p = getCoords(this, aX, aY);
+    let p = getCoords(this, aX, aY);
     this.currentPath_.push({type: 'lineTo', x: p.x, y: p.y});
 
     this.currentX_ = p.x;
@@ -639,9 +639,9 @@ if (!document.createElement('canvas').getContext) {
   contextPrototype.bezierCurveTo = function(aCP1x, aCP1y,
                                             aCP2x, aCP2y,
                                             aX, aY) {
-    var p = getCoords(this, aX, aY);
-    var cp1 = getCoords(this, aCP1x, aCP1y);
-    var cp2 = getCoords(this, aCP2x, aCP2y);
+    let p = getCoords(this, aX, aY);
+    let cp1 = getCoords(this, aCP1x, aCP1y);
+    let cp2 = getCoords(this, aCP2x, aCP2y);
     bezierCurveTo(this, cp1, cp2, p);
   };
 
@@ -664,14 +664,14 @@ if (!document.createElement('canvas').getContext) {
     // the following is lifted almost directly from
     // http://developer.mozilla.org/en/docs/Canvas_tutorial:Drawing_shapes
 
-    var cp = getCoords(this, aCPx, aCPy);
-    var p = getCoords(this, aX, aY);
+    let cp = getCoords(this, aCPx, aCPy);
+    let p = getCoords(this, aX, aY);
 
-    var cp1 = {
+    let cp1 = {
       x: this.currentX_ + 2.0 / 3.0 * (cp.x - this.currentX_),
       y: this.currentY_ + 2.0 / 3.0 * (cp.y - this.currentY_)
     };
-    var cp2 = {
+    let cp2 = {
       x: cp1.x + (p.x - this.currentX_) / 3.0,
       y: cp1.y + (p.y - this.currentY_) / 3.0
     };
@@ -682,13 +682,13 @@ if (!document.createElement('canvas').getContext) {
   contextPrototype.arc = function(aX, aY, aRadius,
                                   aStartAngle, aEndAngle, aClockwise) {
     aRadius *= Z;
-    var arcType = aClockwise ? 'at' : 'wa';
+    let arcType = aClockwise ? 'at' : 'wa';
 
-    var xStart = aX + mc(aStartAngle) * aRadius - Z2;
-    var yStart = aY + ms(aStartAngle) * aRadius - Z2;
+    let xStart = aX + mc(aStartAngle) * aRadius - Z2;
+    let yStart = aY + ms(aStartAngle) * aRadius - Z2;
 
-    var xEnd = aX + mc(aEndAngle) * aRadius - Z2;
-    var yEnd = aY + ms(aEndAngle) * aRadius - Z2;
+    let xEnd = aX + mc(aEndAngle) * aRadius - Z2;
+    let yEnd = aY + ms(aEndAngle) * aRadius - Z2;
 
     // IE won't render arches drawn counter clockwise if xStart == xEnd.
     if (xStart == xEnd && !aClockwise) {
@@ -696,9 +696,9 @@ if (!document.createElement('canvas').getContext) {
                        // that can be represented in binary
     }
 
-    var p = getCoords(this, aX, aY);
-    var pStart = getCoords(this, xStart, yStart);
-    var pEnd = getCoords(this, xEnd, yEnd);
+    let p = getCoords(this, aX, aY);
+    let pStart = getCoords(this, xStart, yStart);
+    let pEnd = getCoords(this, xEnd, yEnd);
 
     this.currentPath_.push({type: arcType,
                            x: p.x,
@@ -720,7 +720,7 @@ if (!document.createElement('canvas').getContext) {
   };
 
   contextPrototype.strokeRect = function(aX, aY, aWidth, aHeight) {
-    var oldPath = this.currentPath_;
+    let oldPath = this.currentPath_;
     this.beginPath();
 
     this.moveTo(aX, aY);
@@ -734,7 +734,7 @@ if (!document.createElement('canvas').getContext) {
   };
 
   contextPrototype.fillRect = function(aX, aY, aWidth, aHeight) {
-    var oldPath = this.currentPath_;
+    let oldPath = this.currentPath_;
     this.beginPath();
 
     this.moveTo(aX, aY);
@@ -748,7 +748,7 @@ if (!document.createElement('canvas').getContext) {
   };
 
   contextPrototype.createLinearGradient = function(aX0, aY0, aX1, aY1) {
-    var gradient = new CanvasGradient_('gradient');
+    let gradient = new CanvasGradient_('gradient');
     gradient.x0_ = aX0;
     gradient.y0_ = aY0;
     gradient.x1_ = aX1;
@@ -758,7 +758,7 @@ if (!document.createElement('canvas').getContext) {
 
   contextPrototype.createRadialGradient = function(aX0, aY0, aR0,
                                                    aX1, aY1, aR1) {
-    var gradient = new CanvasGradient_('gradientradial');
+    let gradient = new CanvasGradient_('gradientradial');
     gradient.x0_ = aX0;
     gradient.y0_ = aY0;
     gradient.r0_ = aR0;
@@ -769,17 +769,17 @@ if (!document.createElement('canvas').getContext) {
   };
 
   contextPrototype.drawImage = function(image, var_args) {
-    var dx, dy, dw, dh, sx, sy, sw, sh;
+    let dx, dy, dw, dh, sx, sy, sw, sh;
 
     // to find the original width we overide the width and height
-    var oldRuntimeWidth = image.runtimeStyle.width;
-    var oldRuntimeHeight = image.runtimeStyle.height;
+    let oldRuntimeWidth = image.runtimeStyle.width;
+    let oldRuntimeHeight = image.runtimeStyle.height;
     image.runtimeStyle.width = 'auto';
     image.runtimeStyle.height = 'auto';
 
     // get the original size
-    var w = image.width;
-    var h = image.height;
+    let w = image.width;
+    let h = image.height;
 
     // and remove overides
     image.runtimeStyle.width = oldRuntimeWidth;
@@ -812,15 +812,15 @@ if (!document.createElement('canvas').getContext) {
       throw Error('Invalid number of arguments');
     }
 
-    var d = getCoords(this, dx, dy);
+    let d = getCoords(this, dx, dy);
 
-    var w2 = sw / 2;
-    var h2 = sh / 2;
+    let w2 = sw / 2;
+    let h2 = sh / 2;
 
-    var vmlStr = [];
+    let vmlStr = [];
 
-    var W = 10;
-    var H = 10;
+    let W = 10;
+    let H = 10;
 
     // For some reason that I've now forgotten, using divs didn't work
     vmlStr.push(' <g_vml_:group',
@@ -835,7 +835,7 @@ if (!document.createElement('canvas').getContext) {
 
     if (this.m_[0][0] != 1 || this.m_[0][1] ||
         this.m_[1][1] != 1 || this.m_[1][0]) {
-      var filter = [];
+      let filter = [];
 
       // Note the 12/21 reversal
       filter.push('M11=', this.m_[0][0], ',',
@@ -847,10 +847,10 @@ if (!document.createElement('canvas').getContext) {
 
       // Bounding box calculation (need to minimize displayed area so that
       // filters don't waste time on unused pixels.
-      var max = d;
-      var c2 = getCoords(this, dx + dw, dy);
-      var c3 = getCoords(this, dx, dy + dh);
-      var c4 = getCoords(this, dx + dw, dy + dh);
+      let max = d;
+      let c2 = getCoords(this, dx + dw, dy);
+      let c3 = getCoords(this, dx, dy + dh);
+      let c4 = getCoords(this, dx + dw, dy + dh);
 
       max.x = m.max(max.x, c2.x, c3.x, c4.x);
       max.y = m.max(max.y, c2.y, c3.y, c4.y);
@@ -878,19 +878,19 @@ if (!document.createElement('canvas').getContext) {
   };
 
   contextPrototype.stroke = function(aFill) {
-    var W = 10;
-    var H = 10;
+    let W = 10;
+    let H = 10;
     // Divide the shape into chunks if it's too long because IE has a limit
     // somewhere for how long a VML shape can be. This simple division does
     // not work with fills, only strokes, unfortunately.
-    var chunkSize = 5000;
+    let chunkSize = 5000;
 
-    var min = {x: null, y: null};
-    var max = {x: null, y: null};
+    let min = {x: null, y: null};
+    let max = {x: null, y: null};
 
-    for (var j = 0; j < this.currentPath_.length; j += chunkSize) {
-      var lineStr = [];
-      var lineOpen = false;
+    for (let j = 0; j < this.currentPath_.length; j += chunkSize) {
+      let lineStr = [];
+      let lineOpen = false;
 
       lineStr.push('<g_vml_:shape',
                    ' filled="', !!aFill, '"',
@@ -900,15 +900,15 @@ if (!document.createElement('canvas').getContext) {
                    ' stroked="', !aFill, '"',
                    ' path="');
 
-      var newSeq = false;
+      let newSeq = false;
 
-      for (var i = j; i < Math.min(j + chunkSize, this.currentPath_.length); i++) {
+      for (let i = j; i < Math.min(j + chunkSize, this.currentPath_.length); i++) {
         if (i % chunkSize == 0 && i > 0) { // move into position for next chunk
           lineStr.push(' m ', mr(this.currentPath_[i-1].x), ',', mr(this.currentPath_[i-1].y));
         }
 
-        var p = this.currentPath_[i];
-        var c;
+        let p = this.currentPath_[i];
+        let c;
 
         switch (p.type) {
           case 'moveTo':
@@ -976,10 +976,10 @@ if (!document.createElement('canvas').getContext) {
   };
 
   function appendStroke(ctx, lineStr) {
-    var a = processStyle(ctx.strokeStyle);
-    var color = a.color;
-    var opacity = a.alpha * ctx.globalAlpha;
-    var lineWidth = ctx.lineScale_ * ctx.lineWidth;
+    let a = processStyle(ctx.strokeStyle);
+    let color = a.color;
+    let opacity = a.alpha * ctx.globalAlpha;
+    let lineWidth = ctx.lineScale_ * ctx.lineWidth;
 
     // VML cannot correctly render a line if the width is less than 1px.
     // In that case, we dilute the color to make the line look thinner.
@@ -999,30 +999,30 @@ if (!document.createElement('canvas').getContext) {
   }
 
   function appendFill(ctx, lineStr, min, max) {
-    var fillStyle = ctx.fillStyle;
-    var arcScaleX = ctx.arcScaleX_;
-    var arcScaleY = ctx.arcScaleY_;
-    var width = max.x - min.x;
-    var height = max.y - min.y;
+    let fillStyle = ctx.fillStyle;
+    let arcScaleX = ctx.arcScaleX_;
+    let arcScaleY = ctx.arcScaleY_;
+    let width = max.x - min.x;
+    let height = max.y - min.y;
     if (fillStyle instanceof CanvasGradient_) {
       // TODO: Gradients transformed with the transformation matrix.
-      var angle = 0;
-      var focus = {x: 0, y: 0};
+      let angle = 0;
+      let focus = {x: 0, y: 0};
 
       // additional offset
-      var shift = 0;
+      let shift = 0;
       // scale factor for offset
-      var expansion = 1;
+      let expansion = 1;
 
       if (fillStyle.type_ == 'gradient') {
-        var x0 = fillStyle.x0_ / arcScaleX;
-        var y0 = fillStyle.y0_ / arcScaleY;
-        var x1 = fillStyle.x1_ / arcScaleX;
-        var y1 = fillStyle.y1_ / arcScaleY;
-        var p0 = getCoords(ctx, x0, y0);
-        var p1 = getCoords(ctx, x1, y1);
-        var dx = p1.x - p0.x;
-        var dy = p1.y - p0.y;
+        let x0 = fillStyle.x0_ / arcScaleX;
+        let y0 = fillStyle.y0_ / arcScaleY;
+        let x1 = fillStyle.x1_ / arcScaleX;
+        let y1 = fillStyle.y1_ / arcScaleY;
+        let p0 = getCoords(ctx, x0, y0);
+        let p1 = getCoords(ctx, x1, y1);
+        let dx = p1.x - p0.x;
+        let dy = p1.y - p0.y;
         angle = Math.atan2(dx, dy) * 180 / Math.PI;
 
         // The angle should be a non-negative number.
@@ -1036,7 +1036,7 @@ if (!document.createElement('canvas').getContext) {
           angle = 0;
         }
       } else {
-        var p0 = getCoords(ctx, fillStyle.x0_, fillStyle.y0_);
+        let p0 = getCoords(ctx, fillStyle.x0_, fillStyle.y0_);
         focus = {
           x: (p0.x - min.x) / width,
           y: (p0.y - min.y) / height
@@ -1044,27 +1044,27 @@ if (!document.createElement('canvas').getContext) {
 
         width  /= arcScaleX * Z;
         height /= arcScaleY * Z;
-        var dimension = m.max(width, height);
+        let dimension = m.max(width, height);
         shift = 2 * fillStyle.r0_ / dimension;
         expansion = 2 * fillStyle.r1_ / dimension - shift;
       }
 
       // We need to sort the color stops in ascending order by offset,
       // otherwise IE won't interpret it correctly.
-      var stops = fillStyle.colors_;
+      let stops = fillStyle.colors_;
       stops.sort(function(cs1, cs2) {
         return cs1.offset - cs2.offset;
       });
 
-      var length = stops.length;
-      var color1 = stops[0].color;
-      var color2 = stops[length - 1].color;
-      var opacity1 = stops[0].alpha * ctx.globalAlpha;
-      var opacity2 = stops[length - 1].alpha * ctx.globalAlpha;
+      let length = stops.length;
+      let color1 = stops[0].color;
+      let color2 = stops[length - 1].color;
+      let opacity1 = stops[0].alpha * ctx.globalAlpha;
+      let opacity2 = stops[length - 1].alpha * ctx.globalAlpha;
 
-      var colors = [];
-      for (var i = 0; i < length; i++) {
-        var stop = stops[i];
+      let colors = [];
+      for (let i = 0; i < length; i++) {
+        let stop = stops[i];
         colors.push(stop.offset * expansion + shift + ' ' + stop.color);
       }
 
@@ -1081,8 +1081,8 @@ if (!document.createElement('canvas').getContext) {
                    ' focusposition="', focus.x, ',', focus.y, '" />');
     } else if (fillStyle instanceof CanvasPattern_) {
       if (width && height) {
-        var deltaLeft = -min.x;
-        var deltaTop = -min.y;
+        let deltaLeft = -min.x;
+        let deltaTop = -min.y;
         lineStr.push('<g_vml_:fill',
                      ' position="',
                      deltaLeft / width * arcScaleX * arcScaleX, ',',
@@ -1093,9 +1093,9 @@ if (!document.createElement('canvas').getContext) {
                      ' src="', fillStyle.src_, '" />');
        }
     } else {
-      var a = processStyle(ctx.fillStyle);
-      var color = a.color;
-      var opacity = a.alpha * ctx.globalAlpha;
+      let a = processStyle(ctx.fillStyle);
+      let color = a.color;
+      let opacity = a.alpha * ctx.globalAlpha;
       lineStr.push('<g_vml_:fill color="', color, '" opacity="', opacity,
                    '" />');
     }
@@ -1110,7 +1110,7 @@ if (!document.createElement('canvas').getContext) {
   };
 
   function getCoords(ctx, aX, aY) {
-    var m = ctx.m_;
+    let m = ctx.m_;
     return {
       x: Z * (aX * m[0][0] + aY * m[1][0] + m[2][0]) - Z2,
       y: Z * (aX * m[0][1] + aY * m[1][1] + m[2][1]) - Z2
@@ -1118,7 +1118,7 @@ if (!document.createElement('canvas').getContext) {
   };
 
   contextPrototype.save = function() {
-    var o = {};
+    let o = {};
     copyState(this, o);
     this.aStack_.push(o);
     this.mStack_.push(this.m_);
@@ -1149,13 +1149,13 @@ if (!document.createElement('canvas').getContext) {
       // Determinant of this.m_ means how much the area is enlarged by the
       // transformation. So its square root can be used as a scale factor
       // for width.
-      var det = m[0][0] * m[1][1] - m[0][1] * m[1][0];
+      let det = m[0][0] * m[1][1] - m[0][1] * m[1][0];
       ctx.lineScale_ = sqrt(abs(det));
     }
   }
 
   contextPrototype.translate = function(aX, aY) {
-    var m1 = [
+    let m1 = [
       [1,  0,  0],
       [0,  1,  0],
       [aX, aY, 1]
@@ -1165,10 +1165,10 @@ if (!document.createElement('canvas').getContext) {
   };
 
   contextPrototype.rotate = function(aRot) {
-    var c = mc(aRot);
-    var s = ms(aRot);
+    let c = mc(aRot);
+    let s = ms(aRot);
 
-    var m1 = [
+    let m1 = [
       [c,  s, 0],
       [-s, c, 0],
       [0,  0, 1]
@@ -1180,7 +1180,7 @@ if (!document.createElement('canvas').getContext) {
   contextPrototype.scale = function(aX, aY) {
     this.arcScaleX_ *= aX;
     this.arcScaleY_ *= aY;
-    var m1 = [
+    let m1 = [
       [aX, 0,  0],
       [0,  aY, 0],
       [0,  0,  1]
@@ -1190,7 +1190,7 @@ if (!document.createElement('canvas').getContext) {
   };
 
   contextPrototype.transform = function(m11, m12, m21, m22, dx, dy) {
-    var m1 = [
+    let m1 = [
       [m11, m12, 0],
       [m21, m22, 0],
       [dx,  dy,  1]
@@ -1200,7 +1200,7 @@ if (!document.createElement('canvas').getContext) {
   };
 
   contextPrototype.setTransform = function(m11, m12, m21, m22, dx, dy) {
-    var m = [
+    let m = [
       [m11, m12, 0],
       [m21, m22, 0],
       [dx,  dy,  1]
@@ -1215,20 +1215,20 @@ if (!document.createElement('canvas').getContext) {
    * it yet.
    */
   contextPrototype.drawText_ = function(text, x, y, maxWidth, stroke) {
-    var m = this.m_,
+    let m = this.m_,
         delta = 1000,
         left = 0,
         right = delta,
         offset = {x: 0, y: 0},
         lineStr = [];
 
-    var fontStyle = getComputedStyle(processFontStyle(this.font),
+    let fontStyle = getComputedStyle(processFontStyle(this.font),
                                      this.element_);
 
-    var fontStyleString = buildStyle(fontStyle);
+    let fontStyleString = buildStyle(fontStyle);
 
-    var elementStyle = this.element_.currentStyle;
-    var textAlign = this.textAlign.toLowerCase();
+    let elementStyle = this.element_.currentStyle;
+    let textAlign = this.textAlign.toLowerCase();
     switch (textAlign) {
       case 'left':
       case 'center':
@@ -1271,7 +1271,7 @@ if (!document.createElement('canvas').getContext) {
         break;
     }
 
-    var d = getCoords(this, x + offset.x, y + offset.y);
+    let d = getCoords(this, x + offset.x, y + offset.y);
 
     lineStr.push('<g_vml_:line from="', -left ,' 0" to="', right ,' 0.05" ',
                  ' coordsize="100 100" coordorigin="0 0"',
@@ -1286,10 +1286,10 @@ if (!document.createElement('canvas').getContext) {
                  {x: right, y: fontStyle.size});
     }
 
-    var skewM = m[0][0].toFixed(3) + ',' + m[1][0].toFixed(3) + ',' +
+    let skewM = m[0][0].toFixed(3) + ',' + m[1][0].toFixed(3) + ',' +
                 m[0][1].toFixed(3) + ',' + m[1][1].toFixed(3) + ',0,0';
 
-    var skewOffset = mr(d.x / Z) + ',' + mr(d.y / Z);
+    let skewOffset = mr(d.x / Z) + ',' + mr(d.y / Z);
 
     lineStr.push('<g_vml_:skew on="t" matrix="', skewM ,'" ',
                  ' offset="', skewOffset, '" origin="', left ,' 0" />',
@@ -1313,13 +1313,13 @@ if (!document.createElement('canvas').getContext) {
 
   contextPrototype.measureText = function(text) {
     if (!this.textMeasureEl_) {
-      var s = '<span style="position:absolute;' +
+      let s = '<span style="position:absolute;' +
           'top:-20000px;left:0;padding:0;margin:0;border:none;' +
           'white-space:pre;"></span>';
       this.element_.insertAdjacentHTML('beforeEnd', s);
       this.textMeasureEl_ = this.element_.lastChild;
     }
-    var doc = this.element_.ownerDocument;
+    let doc = this.element_.ownerDocument;
     this.textMeasureEl_.innerHTML = '';
     this.textMeasureEl_.style.font = this.font;
     // Don't use innerHTML or innerText because they allow markup/whitespace.
@@ -1398,7 +1398,7 @@ if (!document.createElement('canvas').getContext) {
     this.code = this[s];
     this.message = s +': DOM Exception ' + this.code;
   }
-  var p = DOMException_.prototype = new Error;
+  let p = DOMException_.prototype = new Error;
   p.INDEX_SIZE_ERR = 1;
   p.DOMSTRING_SIZE_ERR = 2;
   p.HIERARCHY_REQUEST_ERR = 3;

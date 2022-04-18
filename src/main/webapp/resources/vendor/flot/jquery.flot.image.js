@@ -53,7 +53,7 @@ Google Maps).
 */
 
 (function ($) {
-    var options = {
+    let options = {
         series: {
             images: {
                 show: false,
@@ -66,9 +66,9 @@ Google Maps).
     $.plot.image = {};
 
     $.plot.image.loadDataImages = function (series, options, callback) {
-        var urls = [], points = [];
+        let urls = [], points = [];
 
-        var defaultShow = options.series.images.show;
+        let defaultShow = options.series.images.show;
         
         $.each(series, function (i, s) {
             if (!(defaultShow || s.images.show))
@@ -87,7 +87,7 @@ Google Maps).
 
         $.plot.image.load(urls, function (loadedImages) {
             $.each(points, function (i, p) {
-                var url = p[0];
+                let url = p[0];
                 if (loadedImages[url])
                     p[0] = loadedImages[url];
             });
@@ -97,12 +97,12 @@ Google Maps).
     }
     
     $.plot.image.load = function (urls, callback) {
-        var missing = urls.length, loaded = {};
+        let missing = urls.length, loaded = {};
         if (missing == 0)
             callback({});
 
         $.each(urls, function (i, url) {
-            var handler = function () {
+            let handler = function () {
                 --missing;
                 
                 loaded[url] = this;
@@ -116,16 +116,16 @@ Google Maps).
     };
     
     function drawSeries(plot, ctx, series) {
-        var plotOffset = plot.getPlotOffset();
+        let plotOffset = plot.getPlotOffset();
         
         if (!series.images || !series.images.show)
             return;
         
-        var points = series.datapoints.points,
+        let points = series.datapoints.points,
             ps = series.datapoints.pointsize;
         
-        for (var i = 0; i < points.length; i += ps) {
-            var img = points[i],
+        for (let i = 0; i < points.length; i += ps) {
+            let img = points[i],
                 x1 = points[i + 1], y1 = points[i + 2],
                 x2 = points[i + 3], y2 = points[i + 4],
                 xaxis = series.xaxis, yaxis = series.yaxis,
@@ -165,7 +165,7 @@ Google Maps).
                 y1 >= yaxis.max || y2 <= yaxis.min)
                 continue;
 
-            var sx1 = 0, sy1 = 0, sx2 = img.width, sy2 = img.height;
+            let sx1 = 0, sy1 = 0, sx2 = img.width, sy2 = img.height;
             if (x1 < xaxis.min) {
                 sx1 += (sx2 - sx1) * (xaxis.min - x1) / (x2 - x1);
                 x1 = xaxis.min;

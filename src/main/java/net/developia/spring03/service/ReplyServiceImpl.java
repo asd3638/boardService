@@ -15,11 +15,8 @@ import java.util.List;
 @AllArgsConstructor
 public class ReplyServiceImpl implements ReplyService {
 
-  
   private ReplyMapper mapper;
 
-  
-  
   @Override
   public int register(ReplyDTO replyDTO) {
 

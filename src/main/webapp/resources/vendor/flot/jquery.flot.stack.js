@@ -36,14 +36,14 @@ charts or filled areas).
 */
 
 (function ($) {
-    var options = {
+    let options = {
         series: { stack: null } // or number/string
     };
     
     function init(plot) {
         function findMatchingSeries(s, allseries) {
-            var res = null;
-            for (var i = 0; i < allseries.length; ++i) {
+            let res = null;
+            for (let i = 0; i < allseries.length; ++i) {
                 if (s == allseries[i])
                     break;
                 
@@ -58,11 +58,11 @@ charts or filled areas).
             if (s.stack == null || s.stack === false)
                 return;
 
-            var other = findMatchingSeries(s, plot.getData());
+            let other = findMatchingSeries(s, plot.getData());
             if (!other)
                 return;
 
-            var ps = datapoints.pointsize,
+            let ps = datapoints.pointsize,
                 points = datapoints.points,
                 otherps = other.datapoints.pointsize,
                 otherpoints = other.datapoints.points,

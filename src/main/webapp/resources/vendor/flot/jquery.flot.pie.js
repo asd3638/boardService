@@ -59,15 +59,15 @@ More detail and specific examples can be found in the included HTML file.
 
 	// Maximum redraw attempts when fitting labels within the plot
 
-	var REDRAW_ATTEMPTS = 10;
+	let REDRAW_ATTEMPTS = 10;
 
 	// Factor by which to shrink the pie when fitting labels within the plot
 
-	var REDRAW_SHRINK = 0.95;
+	let REDRAW_SHRINK = 0.95;
 
 	function init(plot) {
 
-		var canvas = null,
+		let canvas = null,
 			target = null,
 			options = null,
 			maxRadius = null,
@@ -78,7 +78,7 @@ More detail and specific examples can be found in the included HTML file.
 
 		// interactive variables
 
-		var highlights = [];
+		let highlights = [];
 
 		// add hook to determine if pie plugin in enabled, and then perform necessary operations
 
@@ -118,7 +118,7 @@ More detail and specific examples can be found in the included HTML file.
 		});
 
 		plot.hooks.bindEvents.push(function(plot, eventHolder) {
-			var options = plot.getOptions();
+			let options = plot.getOptions();
 			if (options.series.pie.show) {
 				if (options.grid.hoverable) {
 					eventHolder.unbind("mousemove").mousemove(onMouseMove);
@@ -130,21 +130,21 @@ More detail and specific examples can be found in the included HTML file.
 		});
 
 		plot.hooks.processDatapoints.push(function(plot, series, data, datapoints) {
-			var options = plot.getOptions();
+			let options = plot.getOptions();
 			if (options.series.pie.show) {
 				processDatapoints(plot, series, data, datapoints);
 			}
 		});
 
 		plot.hooks.drawOverlay.push(function(plot, octx) {
-			var options = plot.getOptions();
+			let options = plot.getOptions();
 			if (options.series.pie.show) {
 				drawOverlay(plot, octx);
 			}
 		});
 
 		plot.hooks.draw.push(function(plot, newCtx) {
-			var options = plot.getOptions();
+			let options = plot.getOptions();
 			if (options.series.pie.show) {
 				draw(plot, newCtx);
 			}
@@ -162,7 +162,7 @@ More detail and specific examples can be found in the included HTML file.
 
 		function combine(data) {
 
-			var total = 0,
+			let total = 0,
 				combined = 0,
 				numCombined = 0,
 				color = options.series.pie.combine.color,
@@ -170,9 +170,9 @@ More detail and specific examples can be found in the included HTML file.
 
 			// Fix up the raw data from Flot, ensuring the data is numeric
 
-			for (var i = 0; i < data.length; ++i) {
+			for (let i = 0; i < data.length; ++i) {
 
-				var value = data[i].data;
+				let value = data[i].data;
 
 				// If the data is an array, we'll assume that it's a standard
 				// Flot x-y pair, and are concerned only with the second value.
@@ -203,15 +203,15 @@ More detail and specific examples can be found in the included HTML file.
 
 			// Sum up all the slices, so we can calculate percentages for each
 
-			for (var i = 0; i < data.length; ++i) {
+			for (let i = 0; i < data.length; ++i) {
 				total += data[i].data[0][1];
 			}
 
 			// Count the number of slices with percentages below the combine
 			// threshold; if it turns out to be just one, we won't combine.
 
-			for (var i = 0; i < data.length; ++i) {
-				var value = data[i].data[0][1];
+			for (let i = 0; i < data.length; ++i) {
+				let value = data[i].data[0][1];
 				if (value / total <= options.series.pie.combine.threshold) {
 					combined += value;
 					numCombined++;
@@ -221,8 +221,8 @@ More detail and specific examples can be found in the included HTML file.
 				}
 			}
 
-			for (var i = 0; i < data.length; ++i) {
-				var value = data[i].data[0][1];
+			for (let i = 0; i < data.length; ++i) {
+				let value = data[i].data[0][1];
 				if (numCombined < 2 || value / total > options.series.pie.combine.threshold) {
 					newdata.push(
 						$.extend(data[i], {     /* extend to allow keeping all other original data values
@@ -256,7 +256,7 @@ More detail and specific examples can be found in the included HTML file.
 				return; // if no series were passed
 			}
 
-			var canvasWidth = plot.getPlaceholder().width(),
+			let canvasWidth = plot.getPlaceholder().width(),
 				canvasHeight = plot.getPlaceholder().height(),
 				legendWidth = target.children().filter(".legend").children().width() || 0;
 
@@ -306,7 +306,7 @@ More detail and specific examples can be found in the included HTML file.
 				centerLeft += options.series.pie.offset.left;
 			}
 
-			var slices = plot.getData(),
+			let slices = plot.getData(),
 				attempts = 0;
 
 			// Keep shrinking the pie's radius until drawPie returns true,
@@ -342,11 +342,11 @@ More detail and specific examples can be found in the included HTML file.
 
 			function drawShadow() {
 
-				var shadowLeft = options.series.pie.shadow.left;
-				var shadowTop = options.series.pie.shadow.top;
-				var edge = 10;
-				var alpha = options.series.pie.shadow.alpha;
-				var radius = options.series.pie.radius > 1 ? options.series.pie.radius : maxRadius * options.series.pie.radius;
+				let shadowLeft = options.series.pie.shadow.left;
+				let shadowTop = options.series.pie.shadow.top;
+				let edge = 10;
+				let alpha = options.series.pie.shadow.alpha;
+				let radius = options.series.pie.radius > 1 ? options.series.pie.radius : maxRadius * options.series.pie.radius;
 
 				if (radius >= canvasWidth / 2 - shadowLeft || radius * options.series.pie.tilt >= canvasHeight / 2 - shadowTop || radius <= edge) {
 					return;	// shadow would be outside canvas, so don't draw it
@@ -364,7 +364,7 @@ More detail and specific examples can be found in the included HTML file.
 
 				//radius -= edge;
 
-				for (var i = 1; i <= edge; i++) {
+				for (let i = 1; i <= edge; i++) {
 					ctx.beginPath();
 					ctx.arc(0, 0, radius, 0, Math.PI * 2, false);
 					ctx.fill();
@@ -376,8 +376,8 @@ More detail and specific examples can be found in the included HTML file.
 
 			function drawPie() {
 
-				var startAngle = Math.PI * options.series.pie.startAngle;
-				var radius = options.series.pie.radius > 1 ? options.series.pie.radius : maxRadius * options.series.pie.radius;
+				let startAngle = Math.PI * options.series.pie.startAngle;
+				let radius = options.series.pie.radius > 1 ? options.series.pie.radius : maxRadius * options.series.pie.radius;
 
 				// center and rotate to starting position
 
@@ -389,8 +389,8 @@ More detail and specific examples can be found in the included HTML file.
 				// draw slices
 
 				ctx.save();
-				var currentAngle = startAngle;
-				for (var i = 0; i < slices.length; ++i) {
+				let currentAngle = startAngle;
+				for (let i = 0; i < slices.length; ++i) {
 					slices[i].startAngle = currentAngle;
 					drawSlice(slices[i].angle, slices[i].color, true);
 				}
@@ -402,7 +402,7 @@ More detail and specific examples can be found in the included HTML file.
 					ctx.save();
 					ctx.lineWidth = options.series.pie.stroke.width;
 					currentAngle = startAngle;
-					for (var i = 0; i < slices.length; ++i) {
+					for (let i = 0; i < slices.length; ++i) {
 						drawSlice(slices[i].angle, options.series.pie.stroke.color, false);
 					}
 					ctx.restore();
@@ -454,10 +454,10 @@ More detail and specific examples can be found in the included HTML file.
 
 				function drawLabels() {
 
-					var currentAngle = startAngle;
-					var radius = options.series.pie.label.radius > 1 ? options.series.pie.label.radius : maxRadius * options.series.pie.label.radius;
+					let currentAngle = startAngle;
+					let radius = options.series.pie.label.radius > 1 ? options.series.pie.label.radius : maxRadius * options.series.pie.label.radius;
 
-					for (var i = 0; i < slices.length; ++i) {
+					for (let i = 0; i < slices.length; ++i) {
 						if (slices[i].percent >= options.series.pie.label.threshold * 100) {
 							if (!drawLabel(slices[i], currentAngle, i)) {
 								return false;
@@ -476,7 +476,7 @@ More detail and specific examples can be found in the included HTML file.
 
 						// format label text
 
-						var lf = options.legend.labelFormatter, text, plf = options.series.pie.label.formatter;
+						let lf = options.legend.labelFormatter, text, plf = options.series.pie.label.formatter;
 
 						if (lf) {
 							text = lf(slice.label, slice);
@@ -488,16 +488,16 @@ More detail and specific examples can be found in the included HTML file.
 							text = plf(text, slice);
 						}
 
-						var halfAngle = ((startAngle + slice.angle) + startAngle) / 2;
-						var x = centerLeft + Math.round(Math.cos(halfAngle) * radius);
-						var y = centerTop + Math.round(Math.sin(halfAngle) * radius) * options.series.pie.tilt;
+						let halfAngle = ((startAngle + slice.angle) + startAngle) / 2;
+						let x = centerLeft + Math.round(Math.cos(halfAngle) * radius);
+						let y = centerTop + Math.round(Math.sin(halfAngle) * radius) * options.series.pie.tilt;
 
-						var html = "<span class='pieLabel' id='pieLabel" + index + "' style='position:absolute;top:" + y + "px;left:" + x + "px;'>" + text + "</span>";
+						let html = "<span class='pieLabel' id='pieLabel" + index + "' style='position:absolute;top:" + y + "px;left:" + x + "px;'>" + text + "</span>";
 						target.append(html);
 
-						var label = target.children("#pieLabel" + index);
-						var labelTop = (y - label.height() / 2);
-						var labelLeft = (x - label.width() / 2);
+						let label = target.children("#pieLabel" + index);
+						let labelTop = (y - label.height() / 2);
+						let labelLeft = (x - label.width() / 2);
 
 						label.css("top", labelTop);
 						label.css("left", labelLeft);
@@ -512,13 +512,13 @@ More detail and specific examples can be found in the included HTML file.
 
 							// put in the transparent background separately to avoid blended labels and label boxes
 
-							var c = options.series.pie.label.background.color;
+							let c = options.series.pie.label.background.color;
 
 							if (c == null) {
 								c = slice.color;
 							}
 
-							var pos = "top:" + labelTop + "px;left:" + labelLeft + "px;";
+							let pos = "top:" + labelTop + "px;left:" + labelLeft + "px;";
 							$("<div class='pieLabelBackground' style='position:absolute;width:" + label.width() + "px;height:" + label.height() + "px;" + pos + "background-color:" + c + ";'></div>")
 								.css("opacity", options.series.pie.label.background.opacity)
 								.insertBefore(label);
@@ -538,7 +538,7 @@ More detail and specific examples can be found in the included HTML file.
 				// subtract the center
 
 				layer.save();
-				var innerRadius = options.series.pie.innerRadius > 1 ? options.series.pie.innerRadius : maxRadius * options.series.pie.innerRadius;
+				let innerRadius = options.series.pie.innerRadius > 1 ? options.series.pie.innerRadius : maxRadius * options.series.pie.innerRadius;
 				layer.globalCompositeOperation = "destination-out"; // this does not work with excanvas, but it will fall back to using the stroke color
 				layer.beginPath();
 				layer.fillStyle = options.series.pie.stroke.color;
@@ -564,7 +564,7 @@ More detail and specific examples can be found in the included HTML file.
 		//-- Additional Interactive related functions --
 
 		function isPointInPoly(poly, pt) {
-			for(var c = false, i = -1, l = poly.length, j = l - 1; ++i < l; j = i)
+			for(let c = false, i = -1, l = poly.length, j = l - 1; ++i < l; j = i)
 				((poly[i][1] <= pt[1] && pt[1] < poly[j][1]) || (poly[j][1] <= pt[1] && pt[1]< poly[i][1]))
 				&& (pt[0] < (poly[j][0] - poly[i][0]) * (pt[1] - poly[i][1]) / (poly[j][1] - poly[i][1]) + poly[i][0])
 				&& (c = !c);
@@ -573,14 +573,14 @@ More detail and specific examples can be found in the included HTML file.
 
 		function findNearbySlice(mouseX, mouseY) {
 
-			var slices = plot.getData(),
+			let slices = plot.getData(),
 				options = plot.getOptions(),
 				radius = options.series.pie.radius > 1 ? options.series.pie.radius : maxRadius * options.series.pie.radius,
 				x, y;
 
-			for (var i = 0; i < slices.length; ++i) {
+			for (let i = 0; i < slices.length; ++i) {
 
-				var s = slices[i];
+				let s = slices[i];
 
 				if (s.pie.show) {
 
@@ -608,7 +608,7 @@ More detail and specific examples can be found in the included HTML file.
 
 						// excanvas for IE doesn;t support isPointInPath, this is a workaround.
 
-						var p1X = radius * Math.cos(s.startAngle),
+						let p1X = radius * Math.cos(s.startAngle),
 							p1Y = radius * Math.sin(s.startAngle),
 							p2X = radius * Math.cos(s.startAngle + s.angle / 4),
 							p2Y = radius * Math.sin(s.startAngle + s.angle / 4),
@@ -653,17 +653,17 @@ More detail and specific examples can be found in the included HTML file.
 
 		function triggerClickHoverEvent(eventname, e) {
 
-			var offset = plot.offset();
-			var canvasX = parseInt(e.pageX - offset.left);
-			var canvasY =  parseInt(e.pageY - offset.top);
-			var item = findNearbySlice(canvasX, canvasY);
+			let offset = plot.offset();
+			let canvasX = parseInt(e.pageX - offset.left);
+			let canvasY =  parseInt(e.pageY - offset.top);
+			let item = findNearbySlice(canvasX, canvasY);
 
 			if (options.grid.autoHighlight) {
 
 				// clear auto-highlights
 
-				for (var i = 0; i < highlights.length; ++i) {
-					var h = highlights[i];
+				for (let i = 0; i < highlights.length; ++i) {
+					let h = highlights[i];
 					if (h.auto == eventname && !(item && h.series == item.series)) {
 						unhighlight(h.series);
 					}
@@ -678,7 +678,7 @@ More detail and specific examples can be found in the included HTML file.
 
 			// trigger any hover bind events
 
-			var pos = { pageX: e.pageX, pageY: e.pageY };
+			let pos = { pageX: e.pageX, pageY: e.pageY };
 			target.trigger(eventname, [pos, item]);
 		}
 
@@ -687,7 +687,7 @@ More detail and specific examples can be found in the included HTML file.
 			//	s = series[s];
 			//}
 
-			var i = indexOfHighlight(s);
+			let i = indexOfHighlight(s);
 
 			if (i == -1) {
 				highlights.push({ series: s, auto: auto });
@@ -707,7 +707,7 @@ More detail and specific examples can be found in the included HTML file.
 			//	s = series[s];
 			//}
 
-			var i = indexOfHighlight(s);
+			let i = indexOfHighlight(s);
 
 			if (i != -1) {
 				highlights.splice(i, 1);
@@ -716,8 +716,8 @@ More detail and specific examples can be found in the included HTML file.
 		}
 
 		function indexOfHighlight(s) {
-			for (var i = 0; i < highlights.length; ++i) {
-				var h = highlights[i];
+			for (let i = 0; i < highlights.length; ++i) {
+				let h = highlights[i];
 				if (h.series == s)
 					return i;
 			}
@@ -726,15 +726,15 @@ More detail and specific examples can be found in the included HTML file.
 
 		function drawOverlay(plot, octx) {
 
-			var options = plot.getOptions();
+			let options = plot.getOptions();
 
-			var radius = options.series.pie.radius > 1 ? options.series.pie.radius : maxRadius * options.series.pie.radius;
+			let radius = options.series.pie.radius > 1 ? options.series.pie.radius : maxRadius * options.series.pie.radius;
 
 			octx.save();
 			octx.translate(centerLeft, centerTop);
 			octx.scale(1, options.series.pie.tilt);
 
-			for (var i = 0; i < highlights.length; ++i) {
+			for (let i = 0; i < highlights.length; ++i) {
 				drawHighlight(highlights[i].series);
 			}
 
@@ -764,7 +764,7 @@ More detail and specific examples can be found in the included HTML file.
 
 	// define pie specific options and their default values
 
-	var options = {
+	let options = {
 		series: {
 			pie: {
 				show: false,

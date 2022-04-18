@@ -1,32 +1,28 @@
 package net.developia.spring03.service;
 
-import java.util.List;
-
 import net.developia.spring03.dto.BoardAttachDTO;
 import net.developia.spring03.dto.BoardDTO;
 import net.developia.spring03.dto.Criteria;
 
+import java.util.List;
+
 public interface BoardService {
 
-	public void register(BoardDTO board);
+	void register(BoardDTO board);
 
-	public BoardDTO get(Long bno);
+	BoardDTO get(Long bno);
 
-	public boolean modify(BoardDTO board);
+	boolean modify(BoardDTO board);
 
-	public boolean remove(Long bno);
+	boolean remove(Long bno);
 
-	// public List<BoardDTO> getList();
+	List<BoardDTO> getList(Criteria cri);
 
-	public List<BoardDTO> getList(Criteria cri);
+	int getTotal(Criteria cri);
 
-	//추가
-	public int getTotal(Criteria cri);
-
-	public List<BoardAttachDTO> getAttachList(Long bno);
-
-	public void removeAttach(Long bno);
+	List<BoardAttachDTO> getAttachList(Long bno);
 
 	void updateReadCount(Long bno);
 
 }
+

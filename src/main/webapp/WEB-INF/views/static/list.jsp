@@ -540,8 +540,8 @@
     
     <script type = "text/javascript">
     $(function() {
-    	//var infoList = '${crawlingInfo.get('10')}';
-    	var data = [];
+    	//let infoList = '${crawlingInfo.get('10')}';
+    	let data = [];
     	data.push({label: '${crawlingInfo[0].name}', data : '${crawlingInfo[0].number}'});
     	data.push({label: '${crawlingInfo[4].name}', data : '${crawlingInfo[4].number}'});
     	data.push({label: '${crawlingInfo[8].name}', data : '${crawlingInfo[8].number}'});
@@ -554,7 +554,7 @@
     	data.push({label: '${crawlingInfo[36].name}', data : '${crawlingInfo[36].number}'});
     	data.push({label: '${crawlingInfo[40].name}', data : '${crawlingInfo[40].number}'});
 
-    	var formObj = $("form");
+    	let formObj = $("form");
     	
         $.plot($("#test-flot"), data, {
             series: {
@@ -605,8 +605,8 @@
     </script>
     <script type = "text/javascript">
     $(function() {
-    	//var infoList = '${crawlingInfo.get('10')}';
-    	var data = [];
+    	//let infoList = '${crawlingInfo.get('10')}';
+    	let data = [];
     	data.push({label: "c", data : 17.38});
     	data.push({label: "java", data : 11.96});
     	data.push({label: "python", data : 11.72});
@@ -619,7 +619,7 @@
     	data.push({label: "groovy", data : 1.64});
     	data.push({label: "assembly", data : 1.61});
 
-    	var formObj = $("forming");
+    	let formObj = $("forming");
     	
         $.plot($("#tiobe-flot"), data, {
             series: {
@@ -675,7 +675,7 @@
     google.charts.load("current", {packages:["corechart"]});
     google.charts.setOnLoadCallback(drawChart);
     function drawChart() {
-      var data = google.visualization.arrayToDataTable([
+      let data = google.visualization.arrayToDataTable([
         ["Element", "선호도", { role: "style" } ],
         ["JavaScript", 67.7, "gold"],
         ["HTML/CSS", 63.1, "gold"],
@@ -689,21 +689,21 @@
         ["C++", 23.9, "gold"]
       ]);
 
-      var view = new google.visualization.DataView(data);
+      let view = new google.visualization.DataView(data);
       
-      var options = {
+      let options = {
         width: 1200,
         height: 800,
         bar: {groupWidth: "95%"},
         legend: { position: "none" }
         
       };
-      var chart = new google.visualization.BarChart(document.getElementById("barchart_values"));
+      let chart = new google.visualization.BarChart(document.getElementById("barchart_values"));
       chart.draw(view, options);
   }
   </script>
 	<script>
-		var slideIndex = 1;
+		let slideIndex = 1;
 		showDivs(slideIndex);
 		
 		function plusDivs(n) {
@@ -715,9 +715,9 @@
 		}
 		
 		function showDivs(n) {
-		  var i;
-		  var x = document.getElementsByClassName("mySlides");
-		  var dots = document.getElementsByClassName("demo");
+		  let i;
+		  let x = document.getElementsByClassName("mySlides");
+		  let dots = document.getElementsByClassName("demo");
 		  if (n > x.length) {slideIndex = 1}
 		  if (n < 1) {slideIndex = x.length}
 		  for (i = 0; i < x.length; i++) {

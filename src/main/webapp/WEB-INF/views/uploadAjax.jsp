@@ -11,7 +11,6 @@
 	<style>
 		.uploadResult {
 			width: 100%;
-			background-color: gray;
 		}
 		
 		.uploadResult ul {
@@ -70,8 +69,8 @@
 	
 	$(".uploadResult").on("click","span", function(e){
 	   
-	  var targetFile = $(this).data("file");
-	  var type = $(this).data("type");
+	  let targetFile = $(this).data("file");
+	  let type = $(this).data("type");
 	  console.log(targetFile);
 	  
 	  $.ajax({
@@ -92,16 +91,16 @@
 		
 		 $("#uploadBtn").on("click", function(e){
 
-		 var formData = new FormData();
+		 let formData = new FormData();
 		
-		 var inputFile = $("input[name='uploadFile']");
+		 let inputFile = $("input[name='uploadFile']");
 		
-		 var files = inputFile[0].files;
+		 let files = inputFile[0].files;
 		
 		 console.log(files);
 		
 		 //add filedate to formdata
-		 for(var i = 0; i < files.length; i++){
+		 for(let i = 0; i < files.length; i++){
 		
 		 formData.append("uploadFile", files[i]);
 		
@@ -122,8 +121,8 @@
 		 });  
 		 }); */
 
-		var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
-		var maxSize = 5242880; //5MB
+		let regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
+		let maxSize = 5242880; //5MB
 
 		function checkExtension(fileName, fileSize) {
 
@@ -139,19 +138,19 @@
 			return true;
 		}
 
-		var cloneObj = $(".uploadDiv").clone();
+		let cloneObj = $(".uploadDiv").clone();
 
 		$("#uploadBtn").on("click", function(e) {
 
-			var formData = new FormData();
+			let formData = new FormData();
 
-			var inputFile = $("input[name='uploadFile']");
+			let inputFile = $("input[name='uploadFile']");
 
-			var files = inputFile[0].files;
+			let files = inputFile[0].files;
 
 			console.log(files);
 
-			for (var i = 0; i < files.length; i++) {
+			for (let i = 0; i < files.length; i++) {
 
 				if (!checkExtension(files[i].name, files[i].size)) {
 					return false;
@@ -192,20 +191,20 @@
 
 		});
 
-		var uploadResult = $(".uploadResult ul");
+		let uploadResult = $(".uploadResult ul");
  
 
 		 function showUploadedFile(uploadResultArr){
 		 
-		   var str = "";
+		   let str = "";
 		   
 		   $(uploadResultArr).each(function(i, obj){
 		     
 		     if(!obj.image){
 		       
-		       var fileCallPath =  encodeURIComponent( obj.uploadPath+"/"+ obj.uuid +"_"+obj.fileName);
+		       let fileCallPath =  encodeURIComponent( obj.uploadPath+"/"+ obj.uuid +"_"+obj.fileName);
 		       
-		       var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
+		       let fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
 		       
 		       str += "<li><div><a href='/download?fileName="+fileCallPath+"'>"+
 		           "<img src='/resources/img/attach.png'>"+obj.fileName+"</a>"+
@@ -214,9 +213,9 @@
 		           
 		     }else{
 		       
-		       var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
+		       let fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
 		       
-		       var originPath = obj.uploadPath+ "/"+obj.uuid +"_"+obj.fileName;
+		       let originPath = obj.uploadPath+ "/"+obj.uuid +"_"+obj.fileName;
 		       
 		       originPath = originPath.replace(new RegExp(/\\/g),"/");
 		       

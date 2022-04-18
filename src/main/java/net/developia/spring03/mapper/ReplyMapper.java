@@ -8,15 +8,15 @@ import java.util.List;
 
 public interface ReplyMapper {
 
-	public int insert(ReplyDTO replyDTO);
+	int insert(ReplyDTO replyDTO);
 
-	public ReplyDTO read(Long bno);
+	ReplyDTO read(Long bno);
 
-	public int delete(Long bno);
+	int delete(Long bno);
 
-	public int update(ReplyDTO reply);
+	int update(ReplyDTO reply);
 
-	public List<ReplyDTO> getListWithPaging(@Param("cri") Criteria cri, @Param("bno") Long bno);
+	List<ReplyDTO> getListWithPaging(@Param("cri") Criteria cri, @Param("bno") Long bno);
 
-	public int getCountByBno(Long bno);
+	int getCountByBno(Long bno);
 }

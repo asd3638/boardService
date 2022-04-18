@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="net.developia.spring03.mapper.BoardMapper">
 	<sql id="criteria">
 		<trim prefix="(" suffix=") AND " prefixOverrides="OR">
@@ -23,15 +23,17 @@
 		</trim>
 	</sql>
 
-
 	<select id="getList" resultType="net.developia.spring03.dto.BoardDTO">
 	<![CDATA[
-		select * from tbl_board where bno > 0
+		select *
+		from tbl_board
+		where bno > 0
+		  and rownum <= 100
 		]]>
 	</select>
 
 	<insert id="insert">
-		insert into tbl_board (bno,title,content,writer)
+		insert into tbl_board (bno, title, content, writer)
 		values (seq_board.nextval, #{title}, #{content}, #{writer})
 	</insert>
 
@@ -48,13 +50,16 @@
 	</insert>
 
 	<select id="read" resultType="net.developia.spring03.dto.BoardDTO">
-		select * from tbl_board where bno =
-									  #{bno}
+		select *
+		from tbl_board
+		where bno =
+			  #{bno}
 	</select>
 
-
 	<delete id="delete">
-		delete tbl_board where bno = #{bno}
+		delete
+		tbl_board where bno =
+		#{bno}
 	</delete>
 
 	<update id="update">
@@ -62,55 +67,31 @@
 		set title= #{title},
 			content=#{content},
 			writer = #{writer},
-			updateDate = CURRENT_DATE
+			updateDate = sysdate
 		where bno = #{bno}
 	</update>
 
-	<update id="updateReadCount">
-		UPDATE tbl_board SET readcount=readcount+1 WHERE bno = #{bno}
-	</update>
-
-	<select id="getListWithPaging"
-			resultType="net.developia.spring03.dto.BoardDTO">
+	<select id="getListWithPaging" resultType="net.developia.spring03.dto.BoardDTO">
 		<![CDATA[
   select
-    bno, title, content, writer, regDate, updatedate, readCount
+    bno, title, content, writer, regdate, updatedate, readCount
   from
       (
       select /*+INDEX_DESC(tbl_board pk_board) */
-        rownum rn, bno, title, content, writer, regDate, updatedate, readCount
+        rownum rn, bno, title, content, writer, regdate, updatedate, readCount
       from
         tbl_board
       where
   ]]>
-		<trim prefix="(" suffix=") AND " prefixOverrides="OR">
-			<foreach item='type' collection="typeArr">
-				<trim prefix="OR">
-					<choose>
-						<when test="type == 'T'.toString()">
-							title like '%'||#{keyword}||'%'
-						</when>
-						<when test="type == 'C'.toString()">
-							content like '%'||#{keyword}||'%'
-						</when>
-						<when test="type == 'W'.toString()">
-							writer like '%'||#{keyword}||'%'
-						</when>
-					</choose>
-				</trim>
-			</foreach>
-		</trim>
+
+		<include refid="criteria"></include>
 
 		<![CDATA[
       rownum <= #{pageNum} * #{amount}
       )
   where rn > (#{pageNum} -1) * #{amount}
-	order by regDate asc
   ]]>
 	</select>
-
-
-
 
 	<select id="getTotalCount" resultType="int">
 		select count(*) from tbl_board where
@@ -120,5 +101,17 @@
 		bno > 0
 
 	</select>
+
+	<update id="updateReplyCnt">
+		update tbl_board
+		set replyCnt = replyCnt + #{amount}
+		where bno = #{bno}
+	</update>
+
+	<update id="updateReadCount">
+		UPDATE tbl_board
+		SET readcount=readcount + 1
+		WHERE bno = #{bno}
+	</update>
 
 </mapper>
